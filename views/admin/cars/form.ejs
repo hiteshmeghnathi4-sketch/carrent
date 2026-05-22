@@ -1,0 +1,108 @@
+<%- include("../../partials/head", { title }) %>
+<%- include("../../partials/nav") %>
+<%- include("../../partials/flash") %>
+
+<section class="section-banner">
+  <div>
+    <p class="eyebrow"><%= formMode === "create" ? "Add car" : "Edit car" %></p>
+    <h1><%= formMode === "create" ? "Publish a new fleet listing." : `Update ${car.name}.` %></h1>
+  </div>
+</section>
+
+<form
+  class="panel form-panel form-panel-wide"
+  action="<%= formMode === 'create' ? '/admin/cars' : `/admin/cars/${car.id}/update` %>"
+  method="post"
+  enctype="multipart/form-data"
+>
+  <div class="split-fields">
+    <label>
+      Car name
+      <input type="text" name="name" value="<%= car.name %>" required />
+    </label>
+    <label>
+      Brand
+      <input type="text" name="brand" value="<%= car.brand %>" required />
+    </label>
+  </div>
+
+  <div class="split-fields">
+    <label>
+      City
+      <input type="text" name="city" value="<%= car.city %>" required />
+    </label>
+    <label>
+      Category
+      <input type="text" name="category" value="<%= car.category %>" required />
+    </label>
+  </div>
+
+  <div class="split-fields split-fields-three">
+    <label>
+      Transmission
+      <input type="text" name="transmission" value="<%= car.transmission %>" required />
+    </label>
+    <label>
+      Fuel
+      <input type="text" name="fuel" value="<%= car.fuel %>" required />
+    </label>
+    <label>
+      Seats
+      <input type="number" min="2" name="seats" value="<%= car.seats %>" required />
+    </label>
+  </div>
+
+  <div class="split-fields">
+    <label>
+      Price per day
+      <input type="number" min="0" name="pricePerDay" value="<%= car.pricePerDay %>" required />
+    </label>
+    <label>
+      Image URL
+      <input type="url" name="image" value="<%= String(car.image || '').startsWith('/uploads/') ? '' : car.image %>" placeholder="Optional if you upload a file below" />
+    </label>
+  </div>
+
+  <div class="split-fields">
+    <label>
+      Upload car photo
+      <input type="file" name="photo" accept="image/*" />
+      <small class="form-help">Upload a JPG, PNG, WEBP, or other image up to 5 MB.</small>
+    </label>
+
+    <% if (car.image) { %>
+      <div class="upload-preview">
+        <span class="form-label">Current photo</span>
+        <img src="<%= car.image %>" alt="<%= car.name || 'Car image' %>" />
+      </div>
+    <% } else { %>
+      <div class="upload-preview upload-preview-empty">
+        <span class="form-label">Photo source</span>
+        <p>Add either an image URL or upload a photo file.</p>
+      </div>
+    <% } %>
+  </div>
+
+  <label>
+    Description
+    <textarea name="description" rows="5"><%= car.description %></textarea>
+  </label>
+
+  <div class="checkbox-row">
+    <label class="check-option">
+      <input type="checkbox" name="available" <%= car.available ? "checked" : "" %> />
+      Available for booking
+    </label>
+    <label class="check-option">
+      <input type="checkbox" name="featured" <%= car.featured ? "checked" : "" %> />
+      Feature on home page
+    </label>
+  </div>
+
+  <div class="stack-actions stack-actions-inline">
+    <button class="button" type="submit"><%= formMode === "create" ? "Add Car" : "Save Changes" %></button>
+    <a class="button button-secondary" href="/admin/cars">Cancel</a>
+  </div>
+</form>
+
+<%- include("../../partials/footer") %>

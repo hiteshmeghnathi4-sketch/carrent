@@ -1,0 +1,100 @@
+<%- include("../partials/head", { title }) %>
+<%- include("../partials/nav") %>
+<%- include("../partials/flash") %>
+
+<section class="section-banner">
+  <div>
+    <p class="eyebrow">Admin Dashboard</p>
+    <h1>Monitor fleet activity, booking load, and revenue at a glance.</h1>
+  </div>
+</section>
+
+<section class="dashboard-grid">
+  <article class="stat-card stat-card-large">
+    <span>Total cars</span>
+    <strong><%= stats.cars %></strong>
+  </article>
+  <article class="stat-card stat-card-large">
+    <span>Registered users</span>
+    <strong><%= stats.users %></strong>
+  </article>
+  <article class="stat-card stat-card-large">
+    <span>Total bookings</span>
+    <strong><%= stats.bookings %></strong>
+  </article>
+  <article class="stat-card stat-card-large">
+    <span>Pending approvals</span>
+    <strong><%= stats.pendingBookings %></strong>
+  </article>
+  <article class="stat-card stat-card-large stat-card-accent">
+    <span>Accepted revenue</span>
+    <strong><%= formatCurrency(stats.acceptedRevenue) %></strong>
+  </article>
+</section>
+
+<section class="admin-panels">
+  <article class="panel">
+    <div class="panel-heading">
+      <div>
+        <p class="eyebrow">Revenue dashboard</p>
+        <h2>City-wise earnings</h2>
+      </div>
+    </div>
+
+    <div class="bar-list">
+      <% const cityEntries = Object.entries(revenueByCity); %>
+      <% if (!cityEntries.length) { %>
+        <p class="empty-note">Accepted bookings will surface here once admins approve them.</p>
+      <% } %>
+      <% const peakRevenue = cityEntries.length ? Math.max(...cityEntries.map((entry) => entry[1])) : 1; %>
+      <% cityEntries.forEach(([city, revenue]) => { %>
+        <div class="bar-item">
+          <div class="bar-item__meta">
+            <strong><%= city %></strong>
+            <span><%= formatCurrency(revenue) %></span>
+          </div>
+          <div class="bar-track">
+            <span class="bar-fill" style="width: <%= (revenue / peakRevenue) * 100 %>%"></span>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+  </article>
+
+  <article class="panel">
+    <div class="panel-heading">
+      <div>
+        <p class="eyebrow">Recent requests</p>
+        <h2>Latest bookings</h2>
+      </div>
+      <a class="button button-secondary" href="/admin/bookings">Review all</a>
+    </div>
+
+    <div class="table-shell">
+      <table>
+        <thead>
+          <tr>
+            <th>User</th>
+            <th>Car</th>
+            <th>Dates</th>
+            <th>Status</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% recentBookings.forEach((booking) => { %>
+            <tr>
+              <td><%= booking.user ? booking.user.name : "Unknown user" %></td>
+              <td><%= booking.displayCar.brand %> <%= booking.displayCar.name %></td>
+              <td><%= booking.pickupDate %> to <%= booking.returnDate %></td>
+              <td><span class="status-badge status-<%= booking.status %>"><%= booking.status %></span></td>
+              <td><%= formatCurrency(booking.totalPrice) %></td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </article>
+</section>
+
+<%- include("../partials/footer") %>

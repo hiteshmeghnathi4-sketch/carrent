@@ -1,0 +1,76 @@
+<%- include("../partials/head", { title }) %>
+<%- include("../partials/nav") %>
+<%- include("../partials/flash") %>
+
+<section class="section-header">
+  <div>
+    <p class="eyebrow">Booking Moderation</p>
+    <h1>Accept or reject booking requests and review every trip request.</h1>
+  </div>
+</section>
+
+<div class="filter-pills">
+  <a class="pill-link <%= status === 'all' ? 'is-active' : '' %>" href="/admin/bookings">All</a>
+  <a class="pill-link <%= status === 'pending' ? 'is-active' : '' %>" href="/admin/bookings?status=pending">Pending</a>
+  <a class="pill-link <%= status === 'accepted' ? 'is-active' : '' %>" href="/admin/bookings?status=accepted">Accepted</a>
+  <a class="pill-link <%= status === 'rejected' ? 'is-active' : '' %>" href="/admin/bookings?status=rejected">Rejected</a>
+</div>
+
+<section class="stack-list">
+  <% if (!bookings.length) { %>
+    <article class="empty-state">
+      <h2>No bookings for this filter.</h2>
+      <p>Switch filters or wait for new requests to arrive.</p>
+    </article>
+  <% } %>
+
+  <% bookings.forEach((booking) => { %>
+    <article class="panel moderation-card">
+      <div class="moderation-card__main">
+        <div>
+          <p class="eyebrow"><%= booking.user ? booking.user.email : "Unknown user" %></p>
+          <h3><%= booking.user ? booking.user.name : "Unknown user" %></h3>
+        </div>
+        <span class="status-badge status-<%= booking.status %>"><%= booking.status %></span>
+      </div>
+
+      <div class="detail-grid">
+        <div>
+          <span>Car</span>
+          <strong><%= booking.displayCar.brand %> <%= booking.displayCar.name %></strong>
+        </div>
+        <div>
+          <span>City</span>
+          <strong><%= booking.displayCar.city %></strong>
+        </div>
+        <div>
+          <span>Dates</span>
+          <strong><%= booking.pickupDate %> to <%= booking.returnDate %></strong>
+        </div>
+        <div>
+          <span>Total</span>
+          <strong><%= formatCurrency(booking.totalPrice) %></strong>
+        </div>
+      </div>
+
+      <% if (booking.note) { %>
+        <p class="booking-note"><strong>Note:</strong> <%= booking.note %></p>
+      <% } %>
+
+      <% if (booking.status === "pending") { %>
+        <div class="table-actions">
+          <form action="/admin/bookings/<%= booking.id %>/status" method="post">
+            <input type="hidden" name="status" value="accepted" />
+            <button class="button" type="submit">Accept</button>
+          </form>
+          <form action="/admin/bookings/<%= booking.id %>/status" method="post">
+            <input type="hidden" name="status" value="rejected" />
+            <button class="button button-danger" type="submit">Reject</button>
+          </form>
+        </div>
+      <% } %>
+    </article>
+  <% }) %>
+</section>
+
+<%- include("../partials/footer") %>

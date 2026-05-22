@@ -1,0 +1,57 @@
+<%- include("partials/head", { title }) %>
+<%- include("partials/nav") %>
+<%- include("partials/flash") %>
+
+<section class="profile-layout">
+  <div class="profile-summary">
+    <p class="eyebrow">Profile Management</p>
+    <h1>Keep customer details current and monitor your booking activity.</h1>
+    <div class="mini-stats">
+      <article class="stat-card">
+        <span>Total bookings</span>
+        <strong><%= bookingSummary.total %></strong>
+      </article>
+      <article class="stat-card">
+        <span>Accepted</span>
+        <strong><%= bookingSummary.accepted %></strong>
+      </article>
+      <article class="stat-card">
+        <span>Pending</span>
+        <strong><%= bookingSummary.pending %></strong>
+      </article>
+    </div>
+  </div>
+
+  <form class="panel form-panel" action="/profile" method="post">
+    <label>
+      Full name
+      <input type="text" name="name" value="<%= user.name %>" required />
+    </label>
+
+    <label>
+      Email
+      <input type="email" name="email" value="<%= user.email %>" required />
+    </label>
+
+    <div class="split-fields">
+      <label>
+        Phone
+        <input type="text" name="phone" value="<%= user.phone %>" required />
+      </label>
+
+      <label>
+        City
+        <input type="text" name="city" value="<%= user.city %>" required />
+      </label>
+    </div>
+
+    <label>
+      New password
+      <input type="password" name="password" placeholder="Leave blank to keep the current password" />
+    </label>
+
+    <button class="button" type="submit">Save changes</button>
+  </form>
+</section>
+
+<%- include("partials/footer") %>

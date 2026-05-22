@@ -1,0 +1,35 @@
+<header class="site-header">
+  <a class="brand-mark" href="/">
+    <span class="brand-mark__eyebrow">Urban Fleet</span>
+    <span class="brand-mark__title">DriveMint</span>
+  </a>
+
+  <nav class="site-nav">
+    <a href="/" class="<%= currentPath === '/' ? 'is-active' : '' %>">Home</a>
+    <a href="/cars" class="<%= currentPath.startsWith('/cars') ? 'is-active' : '' %>">Cars</a>
+
+    <% if (user && !isAdmin) { %>
+      <a href="/bookings" class="<%= currentPath === '/bookings' ? 'is-active' : '' %>">Bookings</a>
+      <a href="/profile" class="<%= currentPath === '/profile' ? 'is-active' : '' %>">Profile</a>
+    <% } %>
+
+    <% if (isAdmin) { %>
+      <a href="/admin" class="<%= currentPath === '/admin' ? 'is-active' : '' %>">Dashboard</a>
+      <a href="/admin/cars" class="<%= currentPath.startsWith('/admin/cars') ? 'is-active' : '' %>">Manage Cars</a>
+      <a href="/admin/bookings" class="<%= currentPath.startsWith('/admin/bookings') ? 'is-active' : '' %>">Bookings</a>
+      <a href="/admin/users" class="<%= currentPath.startsWith('/admin/users') ? 'is-active' : '' %>">Users</a>
+    <% } %>
+  </nav>
+
+  <div class="site-actions">
+    <% if (user) { %>
+      <span class="user-pill"><%= user.name %></span>
+      <form action="/logout" method="post">
+        <button class="button button-secondary" type="submit">Logout</button>
+      </form>
+    <% } else { %>
+      <a class="button button-secondary" href="/login">Login</a>
+      <a class="button" href="/signup">Sign Up</a>
+    <% } %>
+  </div>
+</header>

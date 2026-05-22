@@ -1,0 +1,20 @@
+{
+  "name": "carrent",
+  "version": "1.0.0",
+  "description": "Full-stack car rental management app with user and admin workflows",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "ejs": "^3.1.10",
+    "express": "^5.1.0",
+    "express-session": "^1.18.2",
+    "multer": "^2.1.1"
+  }
+}

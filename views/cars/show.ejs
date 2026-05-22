@@ -1,0 +1,92 @@
+<%- include("../partials/head", { title }) %>
+<%- include("../partials/nav") %>
+<%- include("../partials/flash") %>
+
+<section class="detail-layout">
+  <article class="detail-card detail-card--visual">
+    <img src="<%= car.image %>" alt="<%= car.name %>" />
+    <div class="detail-card__content">
+      <div class="car-card__topline">
+        <span class="pill"><%= car.city %></span>
+        <span class="pill pill-soft"><%= car.category %></span>
+      </div>
+      <h1><%= car.brand %> <%= car.name %></h1>
+      <p><%= car.description %></p>
+      <div class="spec-row spec-row-large">
+        <span><%= car.transmission %></span>
+        <span><%= car.fuel %></span>
+        <span><%= car.seats %> seats</span>
+      </div>
+    </div>
+  </article>
+
+  <aside class="panel booking-panel">
+    <p class="eyebrow">Book this car</p>
+    <h2><%= formatCurrency(car.pricePerDay) %> per day</h2>
+
+    <% if (user && !isAdmin) { %>
+      <form action="/cars/<%= car.id %>/book" method="post" class="form-panel form-panel-tight">
+        <label>
+          Pickup date
+          <input type="date" name="pickupDate" min="<%= new Date().toISOString().slice(0, 10) %>" required />
+        </label>
+
+        <label>
+          Return date
+          <input type="date" name="returnDate" min="<%= new Date().toISOString().slice(0, 10) %>" required />
+        </label>
+
+        <label>
+          Notes
+          <textarea name="note" rows="4" placeholder="Pickup preferences or trip details"></textarea>
+        </label>
+
+        <button class="button" type="submit">Request Booking</button>
+      </form>
+    <% } else if (isAdmin) { %>
+      <p class="empty-note">Admins can manage this car from the dashboard but cannot place customer bookings.</p>
+      <a class="button button-secondary" href="/admin/cars">Manage fleet</a>
+    <% } else { %>
+      <p class="empty-note">Login or sign up to request this car.</p>
+      <div class="stack-actions">
+        <a class="button" href="/login">Login</a>
+        <a class="button button-secondary" href="/signup">Create account</a>
+      </div>
+    <% } %>
+  </aside>
+</section>
+
+<section class="section-header">
+  <div>
+    <p class="eyebrow">More in <%= car.city %></p>
+    <h2>Explore nearby alternatives.</h2>
+  </div>
+</section>
+
+<section class="card-grid">
+  <% if (!relatedCars.length) { %>
+    <article class="empty-state">
+      <h3>No related cars in this city yet.</h3>
+      <p>Browse the full fleet to view more options across other locations.</p>
+    </article>
+  <% } %>
+
+  <% relatedCars.forEach((related) => { %>
+    <article class="car-card">
+      <img src="<%= related.image %>" alt="<%= related.name %>" />
+      <div class="car-card__body">
+        <div class="car-card__topline">
+          <span class="pill"><%= related.city %></span>
+          <span class="pill pill-soft"><%= related.category %></span>
+        </div>
+        <h3><%= related.brand %> <%= related.name %></h3>
+        <div class="price-row">
+          <strong><%= formatCurrency(related.pricePerDay) %></strong>
+          <a class="button button-secondary" href="/cars/<%= related.id %>">View</a>
+        </div>
+      </div>
+    </article>
+  <% }) %>
+</section>
+
+<%- include("../partials/footer") %>

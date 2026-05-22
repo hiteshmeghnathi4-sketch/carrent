@@ -1,0 +1,60 @@
+<%- include("../partials/head", { title }) %>
+<%- include("../partials/nav") %>
+<%- include("../partials/flash") %>
+
+<section class="section-banner">
+  <div>
+    <p class="eyebrow">Booking History</p>
+    <h1>Track every request and approval in one timeline.</h1>
+  </div>
+</section>
+
+<section class="stack-list">
+  <% if (!bookings.length) { %>
+    <article class="empty-state">
+      <h2>No bookings yet.</h2>
+      <p>Browse the fleet and submit your first request.</p>
+      <a class="button" href="/cars">Browse Cars</a>
+    </article>
+  <% } %>
+
+  <% bookings.forEach((booking) => { %>
+    <article class="booking-card">
+      <img src="<%= booking.displayCar.image %>" alt="<%= booking.displayCar.name %>" />
+      <div class="booking-card__body">
+        <div class="booking-card__topline">
+          <div>
+            <p class="eyebrow">Booked car</p>
+            <h3><%= booking.displayCar.brand %> <%= booking.displayCar.name %></h3>
+          </div>
+          <span class="status-badge status-<%= booking.status %>"><%= booking.status %></span>
+        </div>
+
+        <div class="detail-grid">
+          <div>
+            <span>City</span>
+            <strong><%= booking.displayCar.city %></strong>
+          </div>
+          <div>
+            <span>Dates</span>
+            <strong><%= booking.pickupDate %> to <%= booking.returnDate %></strong>
+          </div>
+          <div>
+            <span>Duration</span>
+            <strong><%= booking.days %> day<%= booking.days > 1 ? "s" : "" %></strong>
+          </div>
+          <div>
+            <span>Total</span>
+            <strong><%= formatCurrency(booking.totalPrice) %></strong>
+          </div>
+        </div>
+
+        <% if (booking.note) { %>
+          <p class="booking-note"><strong>Note:</strong> <%= booking.note %></p>
+        <% } %>
+      </div>
+    </article>
+  <% }) %>
+</section>
+
+<%- include("../partials/footer") %>

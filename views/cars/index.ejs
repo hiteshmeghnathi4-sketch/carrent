@@ -1,0 +1,68 @@
+<%- include("../partials/head", { title }) %>
+<%- include("../partials/nav") %>
+<%- include("../partials/flash") %>
+
+<section class="section-banner">
+  <div>
+    <p class="eyebrow">Browse Cars</p>
+    <h1>Search the fleet by city and compare what fits your trip.</h1>
+  </div>
+
+  <form class="filter-bar panel" action="/cars" method="get">
+    <label>
+      City
+      <input
+        type="text"
+        name="city"
+        list="city-options"
+        value="<%= filters.city %>"
+        placeholder="Type a city"
+      />
+      <datalist id="city-options">
+        <% cities.forEach((city) => { %>
+          <option value="<%= city %>"></option>
+        <% }) %>
+      </datalist>
+    </label>
+    <button class="button" type="submit">Search</button>
+    <a class="button button-secondary" href="/cars">Reset</a>
+  </form>
+</section>
+
+<section class="results-meta">
+  <p><strong><%= cars.length %></strong> cars available <%= filters.city ? `for ${filters.city}` : "across all cities" %>.</p>
+</section>
+
+<section class="card-grid">
+  <% if (!cars.length) { %>
+    <article class="empty-state">
+      <h2>No cars matched that city yet.</h2>
+      <p>Try another city or clear the search to view the full fleet.</p>
+    </article>
+  <% } %>
+
+  <% cars.forEach((car) => { %>
+    <article class="car-card">
+      <img src="<%= car.image %>" alt="<%= car.name %>" />
+      <div class="car-card__body">
+        <div class="car-card__topline">
+          <span class="pill"><%= car.city %></span>
+          <span class="pill pill-soft"><%= car.category %></span>
+        </div>
+        <h3><%= car.brand %> <%= car.name %></h3>
+        <p><%= car.description %></p>
+        <div class="spec-row">
+          <span><%= car.transmission %></span>
+          <span><%= car.fuel %></span>
+          <span><%= car.seats %> seats</span>
+        </div>
+        <div class="price-row">
+          <strong><%= formatCurrency(car.pricePerDay) %> / day</strong>
+          <a class="button button-secondary" href="/cars/<%= car.id %>">Details</a>
+        </div>
+      </div>
+    </article>
+  <% }) %>
+</section>
+
+<%- include("../partials/footer") %>

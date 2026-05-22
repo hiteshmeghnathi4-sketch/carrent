@@ -1,0 +1,53 @@
+<%- include("../../partials/head", { title }) %>
+<%- include("../../partials/nav") %>
+<%- include("../../partials/flash") %>
+
+<section class="section-header">
+  <div>
+    <p class="eyebrow">Fleet Management</p>
+    <h1>Add, edit, and remove cars from the rental catalog.</h1>
+  </div>
+  <a class="button" href="/admin/cars/new">Add Car</a>
+</section>
+
+<section class="table-shell panel">
+  <table>
+    <thead>
+      <tr>
+        <th>Car</th>
+        <th>City</th>
+        <th>Type</th>
+        <th>Transmission</th>
+        <th>Price/day</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% cars.forEach((car) => { %>
+        <tr>
+          <td><strong><%= car.brand %> <%= car.name %></strong></td>
+          <td><%= car.city %></td>
+          <td><%= car.category %></td>
+          <td><%= car.transmission %></td>
+          <td><%= formatCurrency(car.pricePerDay) %></td>
+          <td>
+            <span class="status-badge <%= car.available ? 'status-accepted' : 'status-rejected' %>">
+              <%= car.available ? 'available' : 'unavailable' %>
+            </span>
+          </td>
+          <td>
+            <div class="table-actions">
+              <a class="button button-secondary" href="/admin/cars/<%= car.id %>/edit">Edit</a>
+              <form action="/admin/cars/<%= car.id %>/delete" method="post">
+                <button class="button button-danger" type="submit">Delete</button>
+              </form>
+            </div>
+          </td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</section>
+
+<%- include("../../partials/footer") %>

@@ -1,0 +1,15 @@
+<%- include("partials/head", { title }) %>
+<%- include("partials/nav") %>
+<%- include("partials/flash") %>
+
+<section class="empty-state empty-state-large">
+  <p class="eyebrow">404</p>
+  <h1><%= message %></h1>
+  <p>Head back to the home page or browse the available cars.</p>
+  <div class="stack-actions stack-actions-inline">
+    <a class="button" href="/">Home</a>
+    <a class="button button-secondary" href="/cars">Browse Cars</a>
+  </div>
+</section>
+
+<%- include("partials/footer") %>

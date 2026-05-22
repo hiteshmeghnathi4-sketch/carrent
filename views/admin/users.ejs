@@ -1,0 +1,62 @@
+<%- include("../partials/head", { title }) %>
+<%- include("../partials/nav") %>
+<%- include("../partials/flash") %>
+
+<section class="section-banner">
+  <div>
+    <p class="eyebrow">User Management</p>
+    <h1>Review accounts, adjust roles, and control access.</h1>
+  </div>
+</section>
+
+<section class="table-shell panel">
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Mobile</th>
+        <th>City</th>
+        <th>Bookings</th>
+        <th>Revenue</th>
+        <th>Role</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% users.forEach((account) => { %>
+        <tr>
+          <td><strong><%= account.name %></strong></td>
+          <td><%= account.email %></td>
+          <td><%= account.phone || "Not provided" %></td>
+          <td><%= account.city %></td>
+          <td><%= account.bookings %></td>
+          <td><%= formatCurrency(account.revenue) %></td>
+          <td>
+            <form action="/admin/users/<%= account.id %>/role" method="post" class="inline-form">
+              <select name="role">
+                <option value="user" <%= account.role === "user" ? "selected" : "" %>>user</option>
+                <option value="admin" <%= account.role === "admin" ? "selected" : "" %>>admin</option>
+              </select>
+              <button class="button button-secondary" type="submit">Update</button>
+            </form>
+          </td>
+          <td>
+            <div class="user-status">
+              <span class="status-badge <%= account.active ? 'status-accepted' : 'status-rejected' %>">
+                <%= account.active ? "active" : "inactive" %>
+              </span>
+              <form action="/admin/users/<%= account.id %>/status" method="post">
+                <button class="button button-secondary" type="submit">
+                  <%= account.active ? "Deactivate" : "Reactivate" %>
+                </button>
+              </form>
+            </div>
+          </td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</section>
+
+<%- include("../partials/footer") %>

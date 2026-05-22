@@ -1,0 +1,28 @@
+<%- include("../partials/head", { title }) %>
+<%- include("../partials/nav") %>
+<%- include("../partials/flash") %>
+
+<section class="form-shell">
+  <div class="form-shell__intro">
+    <p class="eyebrow">Welcome back</p>
+    <h1>Login to book cars or manage the fleet.</h1>
+    <p>Use the demo accounts on the home page if you want to explore both roles quickly.</p>
+  </div>
+
+  <form class="panel form-panel" action="/login" method="post">
+    <label>
+      Email
+      <input type="email" name="email" placeholder="name@example.com" required />
+    </label>
+
+    <label>
+      Password
+      <input type="password" name="password" placeholder="••••••••" required />
+    </label>
+
+    <button class="button" type="submit">Login</button>
+    <p class="inline-link">Need an account? <a href="/signup">Create one</a></p>
+  </form>
+</section>
+
+<%- include("../partials/footer") %>
