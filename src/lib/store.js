@@ -3,7 +3,10 @@ const path = require("path");
 const crypto = require("crypto");
 const bcrypt = require("bcryptjs");
 
-const DATA_FILE = path.join(__dirname, "..", "..", "data", "store.json");
+const DATA_DIR = process.env.DATA_DIR
+  ? path.resolve(process.env.DATA_DIR)
+  : path.join(__dirname, "..", "..", "data");
+const DATA_FILE = path.join(DATA_DIR, "store.json");
 const ONE_DAY_MS = 24 * 60 * 60 * 1000;
 
 function createId(prefix) {
@@ -238,6 +241,8 @@ function normalizeData(data) {
 }
 
 function initializeStore() {
+  fs.mkdirSync(DATA_DIR, { recursive: true });
+
   if (fs.existsSync(DATA_FILE)) {
     return;
   }

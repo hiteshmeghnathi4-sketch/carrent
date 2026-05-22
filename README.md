@@ -35,6 +35,18 @@ Open [http://localhost:3000](http://localhost:3000)
 
 App data is stored in `data/store.json`. The file is created automatically with seed data on first run.
 
+### Production Storage
+
+For production hosting, you can override the storage locations with environment variables:
+
+```env
+SESSION_SECRET=replace-this
+DATA_DIR=/var/data/data
+UPLOAD_DIR=/var/data/uploads
+```
+
+This is useful on Render when you attach a persistent disk.
+
 ## Android App
 
 A proper Android client now lives in `mobile/` and talks to the Express server through `/api` JSON endpoints.
@@ -73,3 +85,26 @@ EXPO_PUBLIC_API_BASE_URL=http://192.168.1.8:3000/api
 ### Important Local Setup Note
 
 This machine did not have `java` or `adb` configured, so the Android project was scaffolded and bundle-validated, but not launched in a local emulator here. To run `npm run android`, install Android Studio plus the Android SDK tools first.
+
+## Deploy On Render
+
+This repo includes a `render.yaml` blueprint for a Node web service with a persistent disk.
+
+### Quick Deploy
+
+1. Push this repo to GitHub.
+2. In Render, connect your GitHub account.
+3. Click `New +` -> `Blueprint`.
+4. Select this repository.
+5. Render will detect `render.yaml`.
+6. Review the service and create it.
+7. After the deploy completes, open the generated `onrender.com` URL.
+
+### What The Blueprint Configures
+
+- `npm install` build command
+- `npm start` start command
+- `SESSION_SECRET` generated automatically
+- persistent disk mounted at `/var/data`
+- app data in `/var/data/data`
+- uploaded car photos in `/var/data/uploads`

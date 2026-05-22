@@ -6,6 +6,7 @@ const publicRoutes = require("./routes/publicRoutes");
 const userRoutes = require("./routes/userRoutes");
 const adminRoutes = require("./routes/adminRoutes");
 const { initializeStore, readData } = require("./lib/store");
+const { UPLOAD_DIR } = require("./lib/uploads");
 
 initializeStore();
 
@@ -17,9 +18,10 @@ app.set("views", path.join(__dirname, "..", "views"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "..", "public")));
+app.use("/uploads", express.static(UPLOAD_DIR));
 app.use(
   session({
-    secret: "drivemint-session-secret",
+    secret: process.env.SESSION_SECRET || "drivemint-session-secret",
     resave: false,
     saveUninitialized: false,
   })

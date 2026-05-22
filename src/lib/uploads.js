@@ -3,7 +3,9 @@ const path = require("path");
 const multer = require("multer");
 const { createId } = require("./store");
 
-const UPLOAD_DIR = path.join(__dirname, "..", "..", "public", "uploads");
+const UPLOAD_DIR = process.env.UPLOAD_DIR
+  ? path.resolve(process.env.UPLOAD_DIR)
+  : path.join(__dirname, "..", "..", "public", "uploads");
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
 
 fs.mkdirSync(UPLOAD_DIR, { recursive: true });
