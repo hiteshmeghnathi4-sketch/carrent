@@ -14,7 +14,6 @@
     <% } %>
 
     <% if (isAdmin) { %>
-      <a href="/admin" class="<%= currentPath === '/admin' ? 'is-active' : '' %>">ડેશબોર્ડ</a>
       <a href="/admin/cars" class="<%= currentPath.startsWith('/admin/cars') ? 'is-active' : '' %>">કાર મેનેજમેન્ટ</a>
       <a href="/admin/bookings" class="<%= currentPath.startsWith('/admin/bookings') ? 'is-active' : '' %>">બુકિંગ્સ</a>
       <a href="/admin/users" class="<%= currentPath.startsWith('/admin/users') ? 'is-active' : '' %>">વપરાશકર્તાઓ</a>
