@@ -53,9 +53,6 @@
             <strong><%= translateCity(city) %></strong>
             <span><%= formatCurrency(revenue) %></span>
           </div>
-          <div class="bar-track">
-            <span class="bar-fill" style="width: <%= ((revenue / peakRevenue) * 100).toFixed(2) %>%;"></span>
-          </div>
         </div>
       <% }) %>
     </div>
