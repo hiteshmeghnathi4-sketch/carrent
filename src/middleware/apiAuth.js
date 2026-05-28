@@ -20,14 +20,14 @@ function requireApiAuth(req, res, next) {
   const tokenValue = extractBearerToken(req);
 
   if (!tokenValue) {
-    return unauthorized(res, "Authentication token is required.");
+    return unauthorized(res, "ઓથેન્ટિકેશન ટોકન જરૂરી છે.");
   }
 
   const data = readData();
   const tokenRecord = data.apiTokens.find((token) => token.token === tokenValue);
 
   if (!tokenRecord) {
-    return unauthorized(res, "Session expired. Please log in again.");
+    return unauthorized(res, "સેશન સમાપ્ત થયું છે. કૃપા કરીને ફરી લોગિન કરો.");
   }
 
   const user = data.users.find((item) => item.id === tokenRecord.userId);
@@ -35,7 +35,7 @@ function requireApiAuth(req, res, next) {
   if (!user || !user.active) {
     data.apiTokens = data.apiTokens.filter((token) => token.token !== tokenValue);
     writeData(data);
-    return unauthorized(res, "This account is no longer active.");
+    return unauthorized(res, "આ એકાઉન્ટ હવે સક્રિય નથી.");
   }
 
   req.apiData = data;
@@ -50,7 +50,7 @@ function requireApiAdmin(req, res, next) {
   return requireApiAuth(req, res, () => {
     if (req.apiUser.role !== "admin") {
       return res.status(403).json({
-        error: "Admin access is required.",
+        error: "એડમિન ઍક્સેસ જરૂરી છે.",
       });
     }
 

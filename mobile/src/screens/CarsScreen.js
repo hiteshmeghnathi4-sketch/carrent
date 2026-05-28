@@ -3,6 +3,7 @@ import { Image, Pressable, RefreshControl, StyleSheet, Text, TextInput, View } f
 import { useIsFocused } from "@react-navigation/native";
 import { apiRequest } from "../api";
 import { Screen, Panel, Eyebrow, HeroTitle, BodyText, ActionButton, StatusPill, EmptyPanel, LoadingPanel } from "../components";
+import { formatSeats, translateDescription, translateFuel, translateTransmission } from "../i18n";
 import { colors, fonts, radius, spacing } from "../theme";
 import { formatCurrency, getErrorMessage } from "../utils";
 
@@ -43,7 +44,7 @@ export function CarsScreen({ navigation }) {
   if (loading) {
     return (
       <Screen scroll={false}>
-        <LoadingPanel title="Loading fleet" message="Pulling the latest available cars for your trip." />
+        <LoadingPanel title="ફ્લીટ લોડ થઈ રહી છે" message="તમારી મુસાફરી માટે નવીનતમ ઉપલબ્ધ કાર્સ લાવવામાં આવી રહી છે." />
       </Screen>
     );
   }
@@ -51,29 +52,29 @@ export function CarsScreen({ navigation }) {
   return (
     <Screen refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => loadCars(city, true)} />}>
       <Panel>
-        <Eyebrow>Browse cars</Eyebrow>
-        <HeroTitle>Search by city and compare the fleet on the go.</HeroTitle>
+        <Eyebrow>કાર્સ જુઓ</Eyebrow>
+        <HeroTitle>શહેર પ્રમાણે શોધો અને મુસાફરી દરમિયાન જ ફ્લીટ સરખાવો.</HeroTitle>
         <BodyText>
-          Filter by city, open a car profile, and place a booking request without leaving the app.
+          શહેર પ્રમાણે ફિલ્ટર કરો, કારની પ્રોફાઇલ ખોલો અને એપ છોડ્યા વગર બુકિંગ વિનંતી કરો.
         </BodyText>
 
         <View style={styles.searchRow}>
           <TextInput
             value={city}
             onChangeText={setCity}
-            placeholder="Delhi, Mumbai, Bengaluru..."
+            placeholder="દિલ્હી, મુંબઈ, બેંગલુરુ..."
             placeholderTextColor={colors.muted}
             style={styles.searchInput}
           />
-          <ActionButton label="Search" onPress={() => loadCars(city)} />
+          <ActionButton label="શોધો" onPress={() => loadCars(city)} />
         </View>
 
-        {city ? <ActionButton label="Clear city filter" onPress={() => { setCity(""); loadCars(""); }} variant="secondary" /> : null}
+        {city ? <ActionButton label="શહેર ફિલ્ટર સાફ કરો" onPress={() => { setCity(""); loadCars(""); }} variant="secondary" /> : null}
         {error ? <Text style={styles.errorText}>{error}</Text> : null}
       </Panel>
 
       {!cars.length ? (
-        <EmptyPanel title="No cars found" message="Try another city or clear the filter to browse the full fleet." />
+        <EmptyPanel title="કોઈ કાર મળી નથી" message="બીજું શહેર અજમાવો અથવા સંપૂર્ણ ફ્લીટ જોવા માટે ફિલ્ટર સાફ કરો." />
       ) : null}
 
       {cars.map((car) => (
@@ -90,13 +91,13 @@ export function CarsScreen({ navigation }) {
                 <StatusPill status={car.category} />
               </View>
               <HeroTitle style={styles.cardTitle}>{car.brand} {car.name}</HeroTitle>
-              <BodyText>{car.description}</BodyText>
+              <BodyText>{translateDescription(car.description)}</BodyText>
               <View style={styles.metaRow}>
-                <Text style={styles.metaText}>{car.transmission}</Text>
-                <Text style={styles.metaText}>{car.fuel}</Text>
-                <Text style={styles.metaText}>{car.seats} seats</Text>
+                <Text style={styles.metaText}>{translateTransmission(car.transmission)}</Text>
+                <Text style={styles.metaText}>{translateFuel(car.fuel)}</Text>
+                <Text style={styles.metaText}>{formatSeats(car.seats)}</Text>
               </View>
-              <Text style={styles.priceText}>{formatCurrency(car.pricePerDay)} / day</Text>
+              <Text style={styles.priceText}>{formatCurrency(car.pricePerDay)} / દિવસ</Text>
             </View>
           </Panel>
         </Pressable>

@@ -4,8 +4,8 @@
 
 <section class="section-banner">
   <div>
-    <p class="eyebrow"><%= formMode === "create" ? "Add car" : "Edit car" %></p>
-    <h1><%= formMode === "create" ? "Publish a new fleet listing." : `Update ${car.name}.` %></h1>
+    <p class="eyebrow"><%= formMode === "create" ? "કાર ઉમેરો" : "કાર સંપાદિત કરો" %></p>
+    <h1><%= formMode === "create" ? "નવી ફ્લીટ લિસ્ટિંગ પ્રકાશિત કરો." : `${car.name} અપડેટ કરો.` %></h1>
   </div>
 </section>
 
@@ -17,91 +17,91 @@
 >
   <div class="split-fields">
     <label>
-      Car name
+      કારનું નામ
       <input type="text" name="name" value="<%= car.name %>" required />
     </label>
     <label>
-      Brand
+      બ્રાન્ડ
       <input type="text" name="brand" value="<%= car.brand %>" required />
     </label>
   </div>
 
   <div class="split-fields">
     <label>
-      City
+      શહેર
       <input type="text" name="city" value="<%= car.city %>" required />
     </label>
     <label>
-      Category
+      કેટેગરી
       <input type="text" name="category" value="<%= car.category %>" required />
     </label>
   </div>
 
   <div class="split-fields split-fields-three">
     <label>
-      Transmission
+      ટ્રાન્સમિશન
       <input type="text" name="transmission" value="<%= car.transmission %>" required />
     </label>
     <label>
-      Fuel
+      ફ્યુઅલ
       <input type="text" name="fuel" value="<%= car.fuel %>" required />
     </label>
     <label>
-      Seats
+      બેઠકો
       <input type="number" min="2" name="seats" value="<%= car.seats %>" required />
     </label>
   </div>
 
   <div class="split-fields">
     <label>
-      Price per day
+      દરરોજની કિંમત
       <input type="number" min="0" name="pricePerDay" value="<%= car.pricePerDay %>" required />
     </label>
     <label>
-      Image URL
-      <input type="url" name="image" value="<%= String(car.image || '').startsWith('/uploads/') ? '' : car.image %>" placeholder="Optional if you upload a file below" />
+      ઇમેજ URL
+      <input type="url" name="image" value="<%= String(car.image || '').startsWith('/uploads/') ? '' : car.image %>" placeholder="નીચે ફાઇલ અપલોડ કરશો તો વૈકલ્પિક" />
     </label>
   </div>
 
   <div class="split-fields">
     <label>
-      Upload car photo
+      કારનો ફોટો અપલોડ કરો
       <input type="file" name="photo" accept="image/*" />
-      <small class="form-help">Upload a JPG, PNG, WEBP, or other image up to 5 MB.</small>
+      <small class="form-help">JPG, PNG, WEBP અથવા અન્ય ઈમેજ 5 MB સુધી અપલોડ કરો.</small>
     </label>
 
     <% if (car.image) { %>
       <div class="upload-preview">
-        <span class="form-label">Current photo</span>
-        <img src="<%= car.image %>" alt="<%= car.name || 'Car image' %>" />
+        <span class="form-label">હાલનો ફોટો</span>
+        <img src="<%= car.image %>" alt="<%= car.name || 'કાર ઇમેજ' %>" />
       </div>
     <% } else { %>
       <div class="upload-preview upload-preview-empty">
-        <span class="form-label">Photo source</span>
-        <p>Add either an image URL or upload a photo file.</p>
+        <span class="form-label">ફોટો સ્રોત</span>
+        <p>ઇમેજ URL ઉમેરો અથવા ફોટો ફાઇલ અપલોડ કરો.</p>
       </div>
     <% } %>
   </div>
 
   <label>
-    Description
+    વર્ણન
     <textarea name="description" rows="5"><%= car.description %></textarea>
   </label>
 
   <div class="checkbox-row">
     <label class="check-option">
       <input type="checkbox" name="available" <%= car.available ? "checked" : "" %> />
-      Available for booking
+      બુકિંગ માટે ઉપલબ્ધ
     </label>
     <label class="check-option">
       <input type="checkbox" name="featured" <%= car.featured ? "checked" : "" %> />
-      Feature on home page
+      હોમ પેજ પર દર્શાવો
     </label>
   </div>
 
   <div class="stack-actions stack-actions-inline">
-    <button class="button" type="submit"><%= formMode === "create" ? "Add Car" : "Save Changes" %></button>
-    <a class="button button-secondary" href="/admin/cars">Cancel</a>
+    <button class="button" type="submit"><%= formMode === "create" ? "કાર ઉમેરો" : "ફેરફાર સંગ્રહિત કરો" %></button>
+    <a class="button button-secondary" href="/admin/cars">રદ કરો</a>
   </div>
 </form>
 

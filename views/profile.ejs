@@ -4,19 +4,19 @@
 
 <section class="profile-layout">
   <div class="profile-summary">
-    <p class="eyebrow">Profile Management</p>
-    <h1>Keep customer details current and monitor your booking activity.</h1>
+    <p class="eyebrow">પ્રોફાઇલ મેનેજમેન્ટ</p>
+    <h1>તમારી વિગતો અપડેટ રાખો અને બુકિંગ પ્રવૃત્તિ પર નજર રાખો.</h1>
     <div class="mini-stats">
       <article class="stat-card">
-        <span>Total bookings</span>
+        <span>કુલ બુકિંગ્સ</span>
         <strong><%= bookingSummary.total %></strong>
       </article>
       <article class="stat-card">
-        <span>Accepted</span>
+        <span>મંજૂર</span>
         <strong><%= bookingSummary.accepted %></strong>
       </article>
       <article class="stat-card">
-        <span>Pending</span>
+        <span>બાકી</span>
         <strong><%= bookingSummary.pending %></strong>
       </article>
     </div>
@@ -24,33 +24,33 @@
 
   <form class="panel form-panel" action="/profile" method="post">
     <label>
-      Full name
+      સંપૂર્ણ નામ
       <input type="text" name="name" value="<%= user.name %>" required />
     </label>
 
     <label>
-      Email
+      ઇમેઇલ
       <input type="email" name="email" value="<%= user.email %>" required />
     </label>
 
     <div class="split-fields">
       <label>
-        Phone
+        મોબાઇલ નંબર
         <input type="text" name="phone" value="<%= user.phone %>" required />
       </label>
 
       <label>
-        City
+        શહેર
         <input type="text" name="city" value="<%= user.city %>" required />
       </label>
     </div>
 
     <label>
-      New password
-      <input type="password" name="password" placeholder="Leave blank to keep the current password" />
+      નવો પાસવર્ડ
+      <input type="password" name="password" placeholder="હાલનો પાસવર્ડ જાળવવા માટે ખાલી રાખો" />
     </label>
 
-    <button class="button" type="submit">Save changes</button>
+    <button class="button" type="submit">ફેરફાર સંગ્રહિત કરો</button>
   </form>
 </section>
 

@@ -4,43 +4,43 @@
 
 <section class="section-header">
   <div>
-    <p class="eyebrow">Fleet Management</p>
-    <h1>Add, edit, and remove cars from the rental catalog.</h1>
+    <p class="eyebrow">ફ્લીટ મેનેજમેન્ટ</p>
+    <h1>રેન્ટલ કેટલોગમાંથી કાર ઉમેરો, ફેરફાર કરો અને દૂર કરો.</h1>
   </div>
-  <a class="button" href="/admin/cars/new">Add Car</a>
+  <a class="button" href="/admin/cars/new">કાર ઉમેરો</a>
 </section>
 
 <section class="table-shell panel">
   <table>
     <thead>
       <tr>
-        <th>Car</th>
-        <th>City</th>
-        <th>Type</th>
-        <th>Transmission</th>
-        <th>Price/day</th>
-        <th>Status</th>
-        <th>Actions</th>
+        <th>કાર</th>
+        <th>શહેર</th>
+        <th>પ્રકાર</th>
+        <th>ટ્રાન્સમિશન</th>
+        <th>કિંમત/દિવસ</th>
+        <th>સ્થિતિ</th>
+        <th>ક્રિયાઓ</th>
       </tr>
     </thead>
     <tbody>
       <% cars.forEach((car) => { %>
         <tr>
           <td><strong><%= car.brand %> <%= car.name %></strong></td>
-          <td><%= car.city %></td>
-          <td><%= car.category %></td>
-          <td><%= car.transmission %></td>
+          <td><%= translateCity(car.city) %></td>
+          <td><%= translateCategory(car.category) %></td>
+          <td><%= translateTransmission(car.transmission) %></td>
           <td><%= formatCurrency(car.pricePerDay) %></td>
           <td>
             <span class="status-badge <%= car.available ? 'status-accepted' : 'status-rejected' %>">
-              <%= car.available ? 'available' : 'unavailable' %>
+              <%= translateAvailability(car.available) %>
             </span>
           </td>
           <td>
             <div class="table-actions">
-              <a class="button button-secondary" href="/admin/cars/<%= car.id %>/edit">Edit</a>
+              <a class="button button-secondary" href="/admin/cars/<%= car.id %>/edit">સંપાદિત કરો</a>
               <form action="/admin/cars/<%= car.id %>/delete" method="post">
-                <button class="button button-danger" type="submit">Delete</button>
+                <button class="button button-danger" type="submit">ડિલીટ</button>
               </form>
             </div>
           </td>

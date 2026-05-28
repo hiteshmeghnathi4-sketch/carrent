@@ -12,6 +12,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
 import { colors, fonts, radius, spacing } from "./theme";
+import { localizeLabel } from "./i18n";
 
 export function Screen({
   children,
@@ -119,6 +120,7 @@ export function TextField({
 
 export function StatusPill({ status }) {
   const normalized = String(status || "").toLowerCase();
+  const label = localizeLabel(status);
   const toneStyle =
     normalized === "accepted" || normalized === "available" || normalized === "active"
       ? styles.statusAccepted
@@ -128,7 +130,7 @@ export function StatusPill({ status }) {
 
   return (
     <View style={[styles.statusPill, toneStyle]}>
-      <Text style={styles.statusText}>{status}</Text>
+      <Text style={styles.statusText}>{label}</Text>
     </View>
   );
 }
@@ -170,7 +172,7 @@ export function PhotoPreview({ uri, label }) {
       ) : (
         <View style={styles.previewEmpty}>
           <BodyText style={styles.previewEmptyText}>
-            Add an image URL or choose a photo from the gallery.
+            ઇમેજ URL ઉમેરો અથવા ગેલેરીમાંથી ફોટો પસંદ કરો.
           </BodyText>
         </View>
       )}

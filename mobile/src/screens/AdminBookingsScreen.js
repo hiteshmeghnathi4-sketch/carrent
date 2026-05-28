@@ -14,10 +14,16 @@ import {
   EmptyPanel,
   LoadingPanel,
 } from "../components";
+import { formatDays, translateCity, translateStatus } from "../i18n";
 import { colors, fonts, spacing } from "../theme";
-import { formatCurrency, getErrorMessage } from "../utils";
+import { formatCurrency, formatDateRange, getErrorMessage } from "../utils";
 
-const FILTERS = ["all", "pending", "accepted", "rejected"];
+const FILTERS = [
+  { value: "all", label: "બધા" },
+  { value: "pending", label: "બાકી" },
+  { value: "accepted", label: "મંજૂર" },
+  { value: "rejected", label: "નકારેલ" },
+];
 
 export function AdminBookingsScreen() {
   const { token } = useAuth();
@@ -71,7 +77,7 @@ export function AdminBookingsScreen() {
   if (loading) {
     return (
       <Screen scroll={false}>
-        <LoadingPanel title="Loading bookings" message="Checking the latest customer requests." />
+        <LoadingPanel title="બુકિંગ્સ લોડ થઈ રહી છે" message="નવીનતમ ગ્રાહક વિનંતીઓ ચકાસી રહ્યા છીએ." />
       </Screen>
     );
   }
@@ -79,48 +85,48 @@ export function AdminBookingsScreen() {
   return (
     <Screen refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => loadBookings(filter, true)} />}>
       <Panel>
-        <Eyebrow>Booking moderation</Eyebrow>
-        <HeroTitle>Accept or reject requests from mobile.</HeroTitle>
-        <BodyText>Pending requests are kept together so admins can work quickly in the field.</BodyText>
+        <Eyebrow>બુકિંગ મોડરેશન</Eyebrow>
+        <HeroTitle>મોબાઇલમાંથી જ વિનંતીઓને મંજૂર અથવા નકારી દો.</HeroTitle>
+        <BodyText>બાકી વિનંતીઓ એકસાથે રાખવામાં આવી છે જેથી એડમિન ઝડપથી કામ કરી શકે.</BodyText>
         {error ? <Text style={styles.errorText}>{error}</Text> : null}
       </Panel>
 
       <View style={styles.filterRow}>
         {FILTERS.map((item) => (
           <ActionButton
-            key={item}
-            label={item}
-            onPress={() => setFilter(item)}
-            variant={filter === item ? "primary" : "secondary"}
+            key={item.value}
+            label={item.label}
+            onPress={() => setFilter(item.value)}
+            variant={filter === item.value ? "primary" : "secondary"}
             small
           />
         ))}
       </View>
 
       {!bookings.length ? (
-        <EmptyPanel title="No bookings for this filter" message="Switch filters or wait for the next request." />
+        <EmptyPanel title="આ ફિલ્ટર માટે કોઈ બુકિંગ નથી" message="ફિલ્ટર બદલો અથવા આગામી વિનંતી માટે રાહ જુઓ." />
       ) : null}
 
       {bookings.map((booking) => (
         <Panel key={booking.id}>
           <View style={styles.headingRow}>
             <View style={styles.headingCopy}>
-              <Eyebrow>{booking.user?.email || "Unknown user"}</Eyebrow>
-              <HeroTitle style={styles.cardTitle}>{booking.user?.name || "Unknown user"}</HeroTitle>
+              <Eyebrow>{booking.user?.email || "અજ્ઞાત વપરાશકર્તા"}</Eyebrow>
+              <HeroTitle style={styles.cardTitle}>{booking.user?.name || "અજ્ઞાત વપરાશકર્તા"}</HeroTitle>
             </View>
             <StatusPill status={booking.status} />
           </View>
 
-          <BodyText>{booking.car?.brand} {booking.car?.name} • {booking.car?.city}</BodyText>
-          <BodyText>{booking.pickupDate} to {booking.returnDate} • {booking.days} day{booking.days > 1 ? "s" : ""}</BodyText>
+          <BodyText>{booking.car?.brand} {booking.car?.name} • {translateCity(booking.car?.city)}</BodyText>
+          <BodyText>{formatDateRange(booking.pickupDate, booking.returnDate)} • {formatDays(booking.days)}</BodyText>
           <Text style={styles.amountText}>{formatCurrency(booking.totalPrice)}</Text>
-          {booking.note ? <BodyText>Note: {booking.note}</BodyText> : null}
+          {booking.note ? <BodyText>નોંધ: {booking.note}</BodyText> : null}
 
           {booking.status === "pending" ? (
             <View style={styles.actionRow}>
-              <ActionButton label="Accept" onPress={() => updateStatus(booking.id, "accepted")} small />
+              <ActionButton label={translateStatus("accepted")} onPress={() => updateStatus(booking.id, "accepted")} small />
               <ActionButton
-                label="Reject"
+                label={translateStatus("rejected")}
                 onPress={() => updateStatus(booking.id, "rejected")}
                 variant="danger"
                 small

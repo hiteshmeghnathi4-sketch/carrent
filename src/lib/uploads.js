@@ -30,7 +30,7 @@ const carPhotoUpload = multer({
       return callback(null, true);
     }
 
-    return callback(new Error("Please upload a valid image file."));
+    return callback(new Error("કૃપા કરીને માન્ય ઈમેજ ફાઇલ અપલોડ કરો."));
   },
 });
 
@@ -58,10 +58,10 @@ function cleanupRequestFile(file) {
 
 function formatUploadError(error) {
   if (error instanceof multer.MulterError && error.code === "LIMIT_FILE_SIZE") {
-    return "Car photo must be 5 MB or smaller.";
+    return "કારનો ફોટો 5 MB અથવા તેનાથી નાનો હોવો જોઈએ.";
   }
 
-  return error.message || "Unable to upload the selected image.";
+  return error.message || "પસંદ કરેલ ઈમેજ અપલોડ થઈ શકી નથી.";
 }
 
 module.exports = {

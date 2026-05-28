@@ -14,6 +14,7 @@ import {
   EmptyPanel,
   LoadingPanel,
 } from "../components";
+import { translateCategory, translateCity, translateFuel, translateTransmission } from "../i18n";
 import { colors, fonts, spacing } from "../theme";
 import { formatCurrency, getErrorMessage } from "../utils";
 
@@ -51,10 +52,10 @@ export function AdminCarsScreen({ navigation }) {
   }
 
   function confirmDelete(car) {
-    Alert.alert("Delete car", `Remove ${car.brand} ${car.name} from the fleet?`, [
-      { text: "Cancel", style: "cancel" },
+    Alert.alert("કાર ડિલીટ કરો", `${car.brand} ${car.name} ને ફ્લીટમાંથી દૂર કરવી છે?`, [
+      { text: "રદ કરો", style: "cancel" },
       {
-        text: "Delete",
+        text: "ડિલીટ",
         style: "destructive",
         onPress: async () => {
           try {
@@ -74,7 +75,7 @@ export function AdminCarsScreen({ navigation }) {
   if (loading) {
     return (
       <Screen scroll={false}>
-        <LoadingPanel title="Loading fleet" message="Syncing the latest cars and availability states." />
+        <LoadingPanel title="ફ્લીટ લોડ થઈ રહી છે" message="નવીનતમ કાર્સ અને ઉપલબ્ધતા સ્થિતિ સમન્વયિત થઈ રહી છે." />
       </Screen>
     );
   }
@@ -82,14 +83,14 @@ export function AdminCarsScreen({ navigation }) {
   return (
     <Screen refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => loadCars(true)} />}>
       <Panel>
-        <Eyebrow>Fleet management</Eyebrow>
-        <HeroTitle>Add, edit, and remove rental listings from Android.</HeroTitle>
-        <BodyText>Admins can maintain inventory here, including locally picked photos.</BodyText>
-        <ActionButton label="Add new car" onPress={() => navigation.navigate("FleetForm", { mode: "create" })} />
+        <Eyebrow>ફ્લીટ મેનેજમેન્ટ</Eyebrow>
+        <HeroTitle>એન્ડ્રોઇડથી જ રેન્ટલ લિસ્ટિંગ ઉમેરો, ફેરફાર કરો અને દૂર કરો.</HeroTitle>
+        <BodyText>એડમિન અહીં ઇન્વેન્ટરી સંભાળી શકે છે, જેમાં ગેલેરીમાંથી પસંદ કરેલા ફોટા પણ સામેલ છે.</BodyText>
+        <ActionButton label="નવી કાર ઉમેરો" onPress={() => navigation.navigate("FleetForm", { mode: "create" })} />
         {error ? <Text style={styles.errorText}>{error}</Text> : null}
       </Panel>
 
-      {!cars.length ? <EmptyPanel title="No cars yet" message="Add your first fleet listing to get started." /> : null}
+      {!cars.length ? <EmptyPanel title="હજુ સુધી કોઈ કાર નથી" message="શરૂઆત કરવા માટે તમારી પ્રથમ ફ્લીટ લિસ્ટિંગ ઉમેરો." /> : null}
 
       {cars.map((car) => (
         <Panel key={car.id} style={styles.cardPanel}>
@@ -97,23 +98,23 @@ export function AdminCarsScreen({ navigation }) {
           <View style={styles.cardBody}>
             <View style={styles.topRow}>
               <View style={styles.copy}>
-                <Eyebrow>{car.city}</Eyebrow>
+                <Eyebrow>{translateCity(car.city)}</Eyebrow>
                 <HeroTitle style={styles.cardTitle}>{car.brand} {car.name}</HeroTitle>
               </View>
               <StatusPill status={car.available ? "available" : "unavailable"} />
             </View>
 
-            <BodyText>{car.category} • {car.transmission} • {car.fuel}</BodyText>
-            <Text style={styles.priceText}>{formatCurrency(car.pricePerDay)} / day</Text>
+            <BodyText>{translateCategory(car.category)} • {translateTransmission(car.transmission)} • {translateFuel(car.fuel)}</BodyText>
+            <Text style={styles.priceText}>{formatCurrency(car.pricePerDay)} / દિવસ</Text>
 
             <View style={styles.actionRow}>
               <ActionButton
-                label="Edit"
+                label="સંપાદિત કરો"
                 onPress={() => navigation.navigate("FleetForm", { mode: "edit", car })}
                 variant="secondary"
                 small
               />
-              <ActionButton label="Delete" onPress={() => confirmDelete(car)} variant="danger" small />
+              <ActionButton label="ડિલીટ" onPress={() => confirmDelete(car)} variant="danger" small />
             </View>
           </View>
         </Panel>

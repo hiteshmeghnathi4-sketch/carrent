@@ -4,29 +4,24 @@
 
 <section class="hero-panel">
   <div class="hero-copy">
-    <p class="eyebrow">Fast booking. Clear approvals. Clean fleet ops.</p>
-    <h1>Rent standout cars across India with a booking flow your team can actually manage.</h1>
-    <p class="hero-text">
-      DriveMint brings the user experience and the admin control room together:
-      search by city, compare cars, request bookings, and manage the entire fleet from one dashboard.
-    </p>
-
+    <p class="eyebrow">ઝડપી બુકિંગ. સ્પષ્ટ મંજૂરી. સરળ ફ્લીટ સંચાલન.</p>
+    <h1>ભારતભરમાં ઉત્તમ કાર્સ ભાડે લો, અને બુકિંગ પ્રક્રિયાને સરળતાથી સંચાલિત કરો.</h1>
     <form class="hero-search" action="/cars" method="get">
-      <label for="city">Search by city</label>
+      <label for="city">શહેર પ્રમાણે શોધો</label>
       <div class="hero-search__row">
         <input
           id="city"
           name="city"
           type="text"
           list="city-options"
-          placeholder="Delhi, Mumbai, Bengaluru..."
+          placeholder="દિલ્હી, મુંબઈ, બેંગલુરુ..."
         />
         <datalist id="city-options">
           <% cities.forEach((city) => { %>
             <option value="<%= city %>"></option>
           <% }) %>
         </datalist>
-        <button class="button" type="submit">Browse Cars</button>
+        <button class="button" type="submit">કાર્સ જુઓ</button>
       </div>
     </form>
   </div>
@@ -34,33 +29,28 @@
   <div class="hero-aside">
     <div class="stat-stack">
       <article class="stat-card">
-        <span>Fleet</span>
-        <strong><%= stats.cars %> cars</strong>
+        <span>ફ્લીટ</span>
+        <strong><%= stats.cars %> કાર્સ</strong>
       </article>
       <article class="stat-card">
-        <span>Cities</span>
-        <strong><%= stats.cities %> hubs</strong>
+        <span>શહેરો</span>
+        <strong><%= stats.cities %> સ્થળો</strong>
       </article>
       <article class="stat-card">
-        <span>Bookings</span>
-        <strong><%= stats.bookings %> tracked</strong>
+        <span>બુકિંગ્સ</span>
+        <strong><%= stats.bookings %> નોંધાયેલ</strong>
       </article>
     </div>
 
-    <div class="note-card">
-      <p class="eyebrow">Demo access</p>
-      <p><strong>User:</strong> aarav@example.com / user123</p>
-      <p><strong>Admin:</strong> admin@drivemint.com / admin123</p>
-    </div>
   </div>
 </section>
 
 <section class="section-header">
   <div>
-    <p class="eyebrow">Featured Fleet</p>
-    <h2>Cars users can discover, compare, and book in a few clicks.</h2>
+    <p class="eyebrow">વિશેષ ફ્લીટ</p>
+    <h2>થોડા ક્લિકમાં શોધી, સરખાવી અને બુક કરી શકાય તેવી કાર્સ.</h2>
   </div>
-  <a class="button button-secondary" href="/cars">See all cars</a>
+  <a class="button button-secondary" href="/cars">બધી કાર્સ જુઓ</a>
 </section>
 
 <section class="card-grid">
@@ -69,41 +59,23 @@
       <img src="<%= car.image %>" alt="<%= car.name %>" />
       <div class="car-card__body">
         <div class="car-card__topline">
-          <span class="pill"><%= car.city %></span>
-          <span class="pill pill-soft"><%= car.category %></span>
+          <span class="pill"><%= translateCity(car.city) %></span>
+          <span class="pill pill-soft"><%= translateCategory(car.category) %></span>
         </div>
         <h3><%= car.name %></h3>
-        <p><%= car.description %></p>
+        <p><%= translateDescription(car.description) %></p>
         <div class="spec-row">
-          <span><%= car.transmission %></span>
-          <span><%= car.fuel %></span>
-          <span><%= car.seats %> seats</span>
+          <span><%= translateTransmission(car.transmission) %></span>
+          <span><%= translateFuel(car.fuel) %></span>
+          <span><%= formatSeats(car.seats) %></span>
         </div>
         <div class="price-row">
           <strong><%= formatCurrency(car.pricePerDay) %></strong>
-          <a class="button button-secondary" href="/cars/<%= car.id %>">View Details</a>
+          <a class="button button-secondary" href="/cars/<%= car.id %>">વિગતો જુઓ</a>
         </div>
       </div>
     </article>
   <% }) %>
-</section>
-
-<section class="feature-grid">
-  <article class="info-card">
-    <p class="eyebrow">User side</p>
-    <h3>Signup, booking history, profile updates</h3>
-    <p>Customers can create an account, request rentals, and track every booking from one place.</p>
-  </article>
-  <article class="info-card">
-    <p class="eyebrow">Admin side</p>
-    <h3>Inventory, approvals, revenue tracking</h3>
-    <p>Admins can add cars, accept or reject requests, manage users, and monitor earnings instantly.</p>
-  </article>
-  <article class="info-card">
-    <p class="eyebrow">Search flow</p>
-    <h3>City-first discovery</h3>
-    <p>Public browsing is centered on location so customers can quickly find available options nearby.</p>
-  </article>
 </section>
 
 <%- include("partials/footer") %>

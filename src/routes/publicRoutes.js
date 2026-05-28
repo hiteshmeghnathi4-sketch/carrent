@@ -16,7 +16,7 @@ router.get("/", (req, res) => {
   };
 
   res.render("home", {
-    title: "Premium Car Rentals",
+    title: "પ્રીમિયમ કાર ભાડે",
     featuredCars,
     stats,
     cities: getCities(data.cars),
@@ -25,7 +25,7 @@ router.get("/", (req, res) => {
 
 router.get("/signup", requireGuest, (req, res) => {
   res.render("auth/signup", {
-    title: "Create Account",
+    title: "એકાઉન્ટ બનાવો",
   });
 });
 
@@ -38,12 +38,12 @@ router.post("/signup", requireGuest, async (req, res) => {
   const cleanedCity = String(city || "").trim();
 
   if (!cleanedName || !cleanedEmail || !cleanedPhone || !cleanedCity || !password) {
-    setFlash(req, "error", "Please complete every signup field.");
+    setFlash(req, "error", "કૃપા કરીને સાઇનઅપના બધા ફીલ્ડ ભરો.");
     return res.redirect("/signup");
   }
 
   if (String(password).length < 6) {
-    setFlash(req, "error", "Password should be at least 6 characters long.");
+    setFlash(req, "error", "પાસવર્ડ ઓછામાં ઓછા 6 અક્ષરનો હોવો જોઈએ.");
     return res.redirect("/signup");
   }
 
@@ -52,7 +52,7 @@ router.post("/signup", requireGuest, async (req, res) => {
   );
 
   if (existingUser) {
-    setFlash(req, "error", "An account with that email already exists.");
+    setFlash(req, "error", "આ ઇમેઇલ સાથેનું એકાઉન્ટ પહેલેથી જ ઉપલબ્ધ છે.");
     return res.redirect("/signup");
   }
 
@@ -72,13 +72,13 @@ router.post("/signup", requireGuest, async (req, res) => {
   writeData(data);
 
   req.session.userId = newUser.id;
-  setFlash(req, "success", "Welcome to DriveMint. Your account is ready.");
+  setFlash(req, "success", "DriveMint માં તમારું સ્વાગત છે. તમારું એકાઉન્ટ તૈયાર છે.");
   return res.redirect("/cars");
 });
 
 router.get("/login", requireGuest, (req, res) => {
   res.render("auth/login", {
-    title: "Login",
+    title: "લોગિન",
   });
 });
 
@@ -88,7 +88,7 @@ router.post("/login", async (req, res) => {
   const cleanedEmail = String(email || "").trim().toLowerCase();
 
   if (!cleanedEmail || !password) {
-    setFlash(req, "error", "Please enter both email and password.");
+    setFlash(req, "error", "કૃપા કરીને ઇમેઇલ અને પાસવર્ડ બંને દાખલ કરો.");
     return res.redirect("/login");
   }
 
@@ -97,24 +97,24 @@ router.post("/login", async (req, res) => {
   );
 
   if (!user) {
-    setFlash(req, "error", "No account was found for that email.");
+    setFlash(req, "error", "આ ઇમેઇલ માટે કોઈ એકાઉન્ટ મળ્યું નથી.");
     return res.redirect("/login");
   }
 
   if (!user.active) {
-    setFlash(req, "error", "This account is currently inactive.");
+    setFlash(req, "error", "આ એકાઉન્ટ હાલમાં નિષ્ક્રિય છે.");
     return res.redirect("/login");
   }
 
   const matches = await bcrypt.compare(password || "", user.passwordHash);
 
   if (!matches) {
-    setFlash(req, "error", "Incorrect password. Please try again.");
+    setFlash(req, "error", "પાસવર્ડ ખોટો છે. કૃપા કરીને ફરી પ્રયત્ન કરો.");
     return res.redirect("/login");
   }
 
   req.session.userId = user.id;
-  setFlash(req, "success", `Welcome back, ${user.name.split(" ")[0]}.`);
+  setFlash(req, "success", `ફરી સ્વાગત છે, ${user.name.split(" ")[0]}.`);
   return res.redirect(user.role === "admin" ? "/admin" : "/cars");
 });
 
@@ -135,7 +135,7 @@ router.get("/cars", (req, res) => {
     .sort((left, right) => left.city.localeCompare(right.city));
 
   res.render("cars/index", {
-    title: "Browse Cars",
+    title: "કાર્સ જુઓ",
     cars,
     cities: getCities(data.cars),
     filters: {
@@ -150,8 +150,8 @@ router.get("/cars/:id", (req, res) => {
 
   if (!car) {
     return res.status(404).render("404", {
-      title: "Car Not Found",
-      message: "That car is no longer available in the catalog.",
+      title: "કાર મળી નથી",
+      message: "આ કાર હવે કેટલોગમાં ઉપલબ્ધ નથી.",
     });
   }
 

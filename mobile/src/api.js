@@ -36,7 +36,9 @@ export async function apiRequest(path, { method = "GET", token, body } = {}) {
   }
 
   if (!response.ok) {
-    const failure = new Error(payload.error || `Request failed with status ${response.status}`);
+    const failure = new Error(
+      payload.error || `વિનંતી નિષ્ફળ ગઈ. સ્થિતિ કોડ ${response.status}`
+    );
     failure.status = response.status;
     failure.payload = payload;
     throw failure;

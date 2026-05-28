@@ -14,6 +14,7 @@ import {
   EmptyPanel,
   LoadingPanel,
 } from "../components";
+import { translateCity, translateRole } from "../i18n";
 import { colors, spacing } from "../theme";
 import { formatCurrency, getErrorMessage } from "../utils";
 
@@ -91,7 +92,7 @@ export function AdminUsersScreen() {
   if (loading) {
     return (
       <Screen scroll={false}>
-        <LoadingPanel title="Loading users" message="Collecting account, role, and revenue details." />
+        <LoadingPanel title="વપરાશકર્તાઓ લોડ થઈ રહ્યા છે" message="એકાઉન્ટ, ભૂમિકા અને આવકની વિગતો ભેગી થઈ રહી છે." />
       </Screen>
     );
   }
@@ -99,13 +100,13 @@ export function AdminUsersScreen() {
   return (
     <Screen refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => loadUsers(true)} />}>
       <Panel>
-        <Eyebrow>User management</Eyebrow>
-        <HeroTitle>See contact details and control account access.</HeroTitle>
-        <BodyText>Admins can view mobile numbers, switch roles, and deactivate accounts here.</BodyText>
+        <Eyebrow>વપરાશકર્તા મેનેજમેન્ટ</Eyebrow>
+        <HeroTitle>સંપર્ક વિગતો જુઓ અને એકાઉન્ટ ઍક્સેસ નિયંત્રિત કરો.</HeroTitle>
+        <BodyText>એડમિન અહીં મોબાઇલ નંબર જોઈ શકે છે, ભૂમિકાઓ બદલી શકે છે અને એકાઉન્ટ નિષ્ક્રિય કરી શકે છે.</BodyText>
         {error ? <Text style={styles.errorText}>{error}</Text> : null}
       </Panel>
 
-      {!users.length ? <EmptyPanel title="No users found" message="Accounts will appear here after signup." /> : null}
+      {!users.length ? <EmptyPanel title="કોઈ વપરાશકર્તા મળ્યા નથી" message="સાઇનઅપ પછી એકાઉન્ટ્સ અહીં દેખાશે." /> : null}
 
       {users.map((account) => (
         <Panel key={account.id}>
@@ -117,20 +118,20 @@ export function AdminUsersScreen() {
             <StatusPill status={account.active ? "active" : "inactive"} />
           </View>
 
-          <BodyText>Mobile: {account.phone || "Not provided"}</BodyText>
-          <BodyText>City: {account.city}</BodyText>
-          <BodyText>Role: {account.role}</BodyText>
-          <BodyText>Bookings: {account.bookings} • Revenue: {formatCurrency(account.revenue)}</BodyText>
+          <BodyText>મોબાઇલ: {account.phone || "આપેલ નથી"}</BodyText>
+          <BodyText>શહેર: {translateCity(account.city)}</BodyText>
+          <BodyText>ભૂમિકા: {translateRole(account.role)}</BodyText>
+          <BodyText>બુકિંગ્સ: {account.bookings} • આવક: {formatCurrency(account.revenue)}</BodyText>
 
           <View style={styles.actionRow}>
             <ActionButton
-              label={account.role === "admin" ? "Make user" : "Make admin"}
+              label={account.role === "admin" ? "વપરાશકર્તા બનાવો" : "એડમિન બનાવો"}
               onPress={() => toggleRole(account)}
               variant="secondary"
               small
             />
             <ActionButton
-              label={account.active ? "Deactivate" : "Reactivate"}
+              label={account.active ? "નિષ્ક્રિય કરો" : "ફરી સક્રિય કરો"}
               onPress={() => toggleStatus(account)}
               variant={account.active ? "danger" : "secondary"}
               small

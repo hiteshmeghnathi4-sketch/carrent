@@ -4,8 +4,8 @@
 
 <section class="section-banner">
   <div>
-    <p class="eyebrow">User Management</p>
-    <h1>Review accounts, adjust roles, and control access.</h1>
+    <p class="eyebrow">વપરાશકર્તા મેનેજમેન્ટ</p>
+    <h1>એકાઉન્ટ જુઓ, ભૂમિકાઓ બદલો અને ઍક્સેસ નિયંત્રિત કરો.</h1>
   </div>
 </section>
 
@@ -13,14 +13,14 @@
   <table>
     <thead>
       <tr>
-        <th>Name</th>
-        <th>Email</th>
-        <th>Mobile</th>
-        <th>City</th>
-        <th>Bookings</th>
-        <th>Revenue</th>
-        <th>Role</th>
-        <th>Status</th>
+        <th>નામ</th>
+        <th>ઇમેઇલ</th>
+        <th>મોબાઇલ</th>
+        <th>શહેર</th>
+        <th>બુકિંગ્સ</th>
+        <th>આવક</th>
+        <th>ભૂમિકા</th>
+        <th>સ્થિતિ</th>
       </tr>
     </thead>
     <tbody>
@@ -28,27 +28,27 @@
         <tr>
           <td><strong><%= account.name %></strong></td>
           <td><%= account.email %></td>
-          <td><%= account.phone || "Not provided" %></td>
-          <td><%= account.city %></td>
+          <td><%= account.phone || "આપેલ નથી" %></td>
+          <td><%= translateCity(account.city) %></td>
           <td><%= account.bookings %></td>
           <td><%= formatCurrency(account.revenue) %></td>
           <td>
             <form action="/admin/users/<%= account.id %>/role" method="post" class="inline-form">
               <select name="role">
-                <option value="user" <%= account.role === "user" ? "selected" : "" %>>user</option>
-                <option value="admin" <%= account.role === "admin" ? "selected" : "" %>>admin</option>
+                <option value="user" <%= account.role === "user" ? "selected" : "" %>>વપરાશકર્તા</option>
+                <option value="admin" <%= account.role === "admin" ? "selected" : "" %>>એડમિન</option>
               </select>
-              <button class="button button-secondary" type="submit">Update</button>
+              <button class="button button-secondary" type="submit">અપડેટ</button>
             </form>
           </td>
           <td>
             <div class="user-status">
               <span class="status-badge <%= account.active ? 'status-accepted' : 'status-rejected' %>">
-                <%= account.active ? "active" : "inactive" %>
+                <%= account.active ? "સક્રિય" : "નિષ્ક્રિય" %>
               </span>
               <form action="/admin/users/<%= account.id %>/status" method="post">
                 <button class="button button-secondary" type="submit">
-                  <%= account.active ? "Deactivate" : "Reactivate" %>
+                  <%= account.active ? "નિષ્ક્રિય કરો" : "ફરી સક્રિય કરો" %>
                 </button>
               </form>
             </div>

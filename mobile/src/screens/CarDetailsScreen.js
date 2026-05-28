@@ -23,8 +23,15 @@ import {
   StatusPill,
   LoadingPanel,
 } from "../components";
+import { formatSeats, translateCity, translateDescription } from "../i18n";
 import { colors, fonts, spacing } from "../theme";
-import { addDays, formatCurrency, formatInputDate, getErrorMessage, parseInputDate } from "../utils";
+import {
+  addDays,
+  formatCurrency,
+  formatInputDate,
+  getErrorMessage,
+  parseInputDate,
+} from "../utils";
 
 export function CarDetailsScreen({ navigation, route }) {
   const { token, user } = useAuth();
@@ -68,7 +75,7 @@ export function CarDetailsScreen({ navigation, route }) {
 
   async function submitBooking() {
     if (!token) {
-      setError("Please log in to request a booking.");
+      setError("બુકિંગ વિનંતી કરવા માટે કૃપા કરીને લોગિન કરો.");
       return;
     }
 
@@ -96,7 +103,8 @@ export function CarDetailsScreen({ navigation, route }) {
   }
 
   function handleDateChange(_event, selectedDate) {
-    const nextDate = selectedDate || parseInputDate(pickerField === "pickup" ? pickupDate : returnDate);
+    const nextDate =
+      selectedDate || parseInputDate(pickerField === "pickup" ? pickupDate : returnDate);
 
     if (Platform.OS === "android") {
       setPickerField("");
@@ -121,7 +129,7 @@ export function CarDetailsScreen({ navigation, route }) {
   if (loading && !car) {
     return (
       <Screen scroll={false}>
-        <LoadingPanel title="Loading car" message="Fetching the latest details and booking availability." />
+        <LoadingPanel title="કાર લોડ થઈ રહી છે" message="નવીનતમ વિગતો અને બુકિંગ ઉપલબ્ધતા લાવવામાં આવી રહી છે." />
       </Screen>
     );
   }
@@ -130,8 +138,8 @@ export function CarDetailsScreen({ navigation, route }) {
     return (
       <Screen>
         <Panel>
-          <HeroTitle>Car unavailable</HeroTitle>
-          <BodyText>{error || "This car could not be loaded right now."}</BodyText>
+          <HeroTitle>કાર ઉપલબ્ધ નથી</HeroTitle>
+          <BodyText>{error || "આ કાર હાલ લોડ થઈ શકી નથી."}</BodyText>
         </Panel>
       </Screen>
     );
@@ -141,52 +149,52 @@ export function CarDetailsScreen({ navigation, route }) {
     <Screen refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => loadCar(true)} />}>
       <Panel style={styles.heroPanel}>
         <Image source={{ uri: car.imageUrl }} style={styles.heroImage} />
-        <Eyebrow>{car.city}</Eyebrow>
+        <Eyebrow>{translateCity(car.city)}</Eyebrow>
         <HeroTitle>{car.brand} {car.name}</HeroTitle>
-        <BodyText>{car.description}</BodyText>
+        <BodyText>{translateDescription(car.description)}</BodyText>
         <View style={styles.metaRow}>
           <StatusPill status={car.category} />
           <StatusPill status={car.transmission} />
           <StatusPill status={car.fuel} />
-          <StatusPill status={`${car.seats} seats`} />
+          <StatusPill status={formatSeats(car.seats)} />
         </View>
-        <Text style={styles.priceText}>{formatCurrency(car.pricePerDay)} / day</Text>
+        <Text style={styles.priceText}>{formatCurrency(car.pricePerDay)} / દિવસ</Text>
       </Panel>
 
       <Panel>
-        <Eyebrow>Booking panel</Eyebrow>
+        <Eyebrow>બુકિંગ પેનલ</Eyebrow>
         {user?.role === "admin" ? (
           <>
-            <HeroTitle style={styles.sectionTitle}>Admin accounts cannot book cars.</HeroTitle>
-            <BodyText>Use the Fleet tab to edit this listing or the Bookings tab to review requests.</BodyText>
+            <HeroTitle style={styles.sectionTitle}>એડમિન એકાઉન્ટ કાર બુક કરી શકતું નથી.</HeroTitle>
+            <BodyText>આ લિસ્ટિંગમાં ફેરફાર કરવા ફ્લીટ ટેબનો ઉપયોગ કરો અથવા વિનંતીઓ જોવા બુકિંગ્સ ટેબ ખોલો.</BodyText>
           </>
         ) : (
           <>
-            <HeroTitle style={styles.sectionTitle}>Request this car</HeroTitle>
-            <BodyText>Choose your trip dates and add any pickup notes for the admin team.</BodyText>
+            <HeroTitle style={styles.sectionTitle}>આ કાર માટે વિનંતી કરો</HeroTitle>
+            <BodyText>તમારી મુસાફરીની તારીખો પસંદ કરો અને એડમિન ટીમ માટે પિકઅપ નોંધ ઉમેરો.</BodyText>
 
             <View style={styles.dateRow}>
               <Pressable onPress={() => setPickerField("pickup")} style={styles.dateChip}>
-                <Text style={styles.dateLabel}>Pickup date</Text>
+                <Text style={styles.dateLabel}>પિકઅપ તારીખ</Text>
                 <Text style={styles.dateValue}>{pickupDate}</Text>
               </Pressable>
               <Pressable onPress={() => setPickerField("return")} style={styles.dateChip}>
-                <Text style={styles.dateLabel}>Return date</Text>
+                <Text style={styles.dateLabel}>રિટર્ન તારીખ</Text>
                 <Text style={styles.dateValue}>{returnDate}</Text>
               </Pressable>
             </View>
 
             <TextField
-              label="Notes"
+              label="નોંધ"
               value={note}
               onChangeText={setNote}
-              placeholder="Pickup preferences or trip details"
+              placeholder="પિકઅપ પસંદગીઓ અથવા મુસાફરીની વિગતો"
               multiline
             />
 
             {error ? <Text style={styles.errorText}>{error}</Text> : null}
             <ActionButton
-              label={submitting ? "Submitting..." : "Request Booking"}
+              label={submitting ? "મોકલાઈ રહ્યું છે..." : "બુકિંગ વિનંતી કરો"}
               onPress={submitBooking}
               disabled={submitting}
             />
@@ -195,11 +203,11 @@ export function CarDetailsScreen({ navigation, route }) {
       </Panel>
 
       <Panel>
-        <Eyebrow>Nearby alternatives</Eyebrow>
-        <HeroTitle style={styles.sectionTitle}>More options in {car.city}</HeroTitle>
+        <Eyebrow>નજીકના વિકલ્પો</Eyebrow>
+        <HeroTitle style={styles.sectionTitle}>{translateCity(car.city)} માં વધુ વિકલ્પો</HeroTitle>
 
         {!relatedCars.length ? (
-          <BodyText>No related cars are listed in this city yet.</BodyText>
+          <BodyText>આ શહેરમાં સંબંધિત કાર્સ હજી સૂચિબદ્ધ નથી.</BodyText>
         ) : (
           relatedCars.map((related) => (
             <Pressable
@@ -210,7 +218,7 @@ export function CarDetailsScreen({ navigation, route }) {
               <Image source={{ uri: related.imageUrl }} style={styles.relatedImage} />
               <View style={styles.relatedBody}>
                 <Text style={styles.relatedTitle}>{related.brand} {related.name}</Text>
-                <Text style={styles.relatedPrice}>{formatCurrency(related.pricePerDay)} / day</Text>
+                <Text style={styles.relatedPrice}>{formatCurrency(related.pricePerDay)} / દિવસ</Text>
               </View>
             </Pressable>
           ))

@@ -55,11 +55,11 @@ const sharedScreenOptions = {
 function UserCarStackScreen() {
   return (
     <UserCarStack.Navigator screenOptions={sharedScreenOptions}>
-      <UserCarStack.Screen name="CarsList" component={CarsScreen} options={{ title: "Browse Cars" }} />
+      <UserCarStack.Screen name="CarsList" component={CarsScreen} options={{ title: "કાર્સ જુઓ" }} />
       <UserCarStack.Screen
         name="CarDetails"
         component={CarDetailsScreen}
-        options={{ title: "Car Details" }}
+        options={{ title: "કારની વિગતો" }}
       />
     </UserCarStack.Navigator>
   );
@@ -68,12 +68,12 @@ function UserCarStackScreen() {
 function AdminCarStackScreen() {
   return (
     <AdminCarStack.Navigator screenOptions={sharedScreenOptions}>
-      <AdminCarStack.Screen name="FleetHome" component={AdminCarsScreen} options={{ title: "Manage Cars" }} />
+      <AdminCarStack.Screen name="FleetHome" component={AdminCarsScreen} options={{ title: "કાર મેનેજમેન્ટ" }} />
       <AdminCarStack.Screen
         name="FleetForm"
         component={AdminCarFormScreen}
         options={({ route }) => ({
-          title: route.params?.mode === "edit" ? "Edit Car" : "Add Car",
+          title: route.params?.mode === "edit" ? "કાર સંપાદિત કરો" : "કાર ઉમેરો",
         })}
       />
     </AdminCarStack.Navigator>
@@ -100,9 +100,9 @@ function UserTabNavigator() {
         },
       }}
     >
-      <UserTabs.Screen name="Cars" component={UserCarStackScreen} />
-      <UserTabs.Screen name="Bookings" component={BookingsScreen} />
-      <UserTabs.Screen name="Profile" component={ProfileScreen} />
+      <UserTabs.Screen name="Cars" component={UserCarStackScreen} options={{ tabBarLabel: "કાર્સ", title: "કાર્સ" }} />
+      <UserTabs.Screen name="Bookings" component={BookingsScreen} options={{ tabBarLabel: "બુકિંગ્સ", title: "બુકિંગ્સ" }} />
+      <UserTabs.Screen name="Profile" component={ProfileScreen} options={{ tabBarLabel: "પ્રોફાઇલ", title: "પ્રોફાઇલ" }} />
     </UserTabs.Navigator>
   );
 }
@@ -127,11 +127,11 @@ function AdminTabNavigator() {
         },
       }}
     >
-      <AdminTabs.Screen name="Dashboard" component={AdminDashboardScreen} />
-      <AdminTabs.Screen name="Fleet" component={AdminCarStackScreen} />
-      <AdminTabs.Screen name="Bookings" component={AdminBookingsScreen} />
-      <AdminTabs.Screen name="Users" component={AdminUsersScreen} />
-      <AdminTabs.Screen name="Profile" component={ProfileScreen} />
+      <AdminTabs.Screen name="Dashboard" component={AdminDashboardScreen} options={{ tabBarLabel: "ડેશબોર્ડ", title: "ડેશબોર્ડ" }} />
+      <AdminTabs.Screen name="Fleet" component={AdminCarStackScreen} options={{ tabBarLabel: "ફ્લીટ", title: "ફ્લીટ" }} />
+      <AdminTabs.Screen name="Bookings" component={AdminBookingsScreen} options={{ tabBarLabel: "બુકિંગ્સ", title: "બુકિંગ્સ" }} />
+      <AdminTabs.Screen name="Users" component={AdminUsersScreen} options={{ tabBarLabel: "વપરાશકર્તા", title: "વપરાશકર્તા" }} />
+      <AdminTabs.Screen name="Profile" component={ProfileScreen} options={{ tabBarLabel: "પ્રોફાઇલ", title: "પ્રોફાઇલ" }} />
     </AdminTabs.Navigator>
   );
 }
@@ -142,7 +142,7 @@ function AppContent() {
   if (!ready) {
     return (
       <Screen scroll={false}>
-        <LoadingPanel title="Booting DriveMint mobile" message="Restoring your session and preparing the app." />
+        <LoadingPanel title="DriveMint મોબાઇલ શરૂ થઈ રહ્યું છે" message="તમારું સેશન પુનઃસ્થાપિત કરીને એપ તૈયાર કરવામાં આવી રહી છે." />
       </Screen>
     );
   }

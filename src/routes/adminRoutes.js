@@ -47,7 +47,7 @@ router.get("/", (req, res) => {
   }, {});
 
   res.render("admin/dashboard", {
-    title: "Admin Dashboard",
+    title: "એડમિન ડેશબોર્ડ",
     stats: {
       cars: data.cars.length,
       users: data.users.filter((user) => user.role === "user").length,
@@ -69,14 +69,14 @@ router.get("/cars", (req, res) => {
   const data = readData();
 
   res.render("admin/cars/index", {
-    title: "Manage Cars",
+    title: "કાર મેનેજમેન્ટ",
     cars: data.cars.sort((left, right) => left.city.localeCompare(right.city)),
   });
 });
 
 router.get("/cars/new", (req, res) => {
   res.render("admin/cars/form", {
-    title: "Add Car",
+    title: "કાર ઉમેરો",
     formMode: "create",
     car: {
       name: "",
@@ -134,7 +134,7 @@ router.post("/cars", uploadCarPhoto("/admin/cars/new"), (req, res) => {
     !parsedPrice
   ) {
     cleanupRequestFile(req.file);
-    setFlash(req, "error", "Please fill in all required car details, including a car photo.");
+    setFlash(req, "error", "કૃપા કરીને કારની બધી જરૂરી વિગતો, સહિત ફોટો, ભરો.");
     return res.redirect("/admin/cars/new");
   }
 
@@ -156,7 +156,7 @@ router.post("/cars", uploadCarPhoto("/admin/cars/new"), (req, res) => {
   });
 
   writeData(data);
-  setFlash(req, "success", "Car added to the fleet.");
+  setFlash(req, "success", "કાર ફ્લીટમાં ઉમેરાઈ ગઈ.");
   return res.redirect("/admin/cars");
 });
 
@@ -165,12 +165,12 @@ router.get("/cars/:id/edit", (req, res) => {
   const car = data.cars.find((item) => item.id === req.params.id);
 
   if (!car) {
-    setFlash(req, "error", "The requested car could not be found.");
+    setFlash(req, "error", "માગેલી કાર મળી નથી.");
     return res.redirect("/admin/cars");
   }
 
   res.render("admin/cars/form", {
-    title: `Edit ${car.name}`,
+    title: `${car.name} સંપાદિત કરો`,
     formMode: "edit",
     car,
   });
@@ -185,7 +185,7 @@ router.post(
 
   if (!car) {
     cleanupRequestFile(req.file);
-    setFlash(req, "error", "The requested car could not be found.");
+    setFlash(req, "error", "માગેલી કાર મળી નથી.");
     return res.redirect("/admin/cars");
   }
 
@@ -212,7 +212,7 @@ router.post(
     !parsedPrice
   ) {
     cleanupRequestFile(req.file);
-    setFlash(req, "error", "Please fill in all required car details, including a car photo.");
+    setFlash(req, "error", "કૃપા કરીને કારની બધી જરૂરી વિગતો, સહિત ફોટો, ભરો.");
     return res.redirect(`/admin/cars/${car.id}/edit`);
   }
 
@@ -239,7 +239,7 @@ router.post(
     removeUploadedImage(previousImage);
   }
 
-  setFlash(req, "success", "Car details updated.");
+  setFlash(req, "success", "કારની વિગતો અપડેટ થઈ ગઈ.");
   return res.redirect("/admin/cars");
 });
 
@@ -248,7 +248,7 @@ router.post("/cars/:id/delete", (req, res) => {
   const nextCars = data.cars.filter((item) => item.id !== req.params.id);
 
   if (nextCars.length === data.cars.length) {
-    setFlash(req, "error", "The requested car could not be found.");
+    setFlash(req, "error", "માગેલી કાર મળી નથી.");
     return res.redirect("/admin/cars");
   }
 
@@ -260,7 +260,7 @@ router.post("/cars/:id/delete", (req, res) => {
     removeUploadedImage(deletedCar.image);
   }
 
-  setFlash(req, "success", "Car removed from the fleet.");
+  setFlash(req, "success", "કાર ફ્લીટમાંથી દૂર કરી દેવામાં આવી.");
   return res.redirect("/admin/cars");
 });
 
@@ -276,7 +276,7 @@ router.get("/bookings", (req, res) => {
   }
 
   res.render("admin/bookings", {
-    title: "Manage Bookings",
+    title: "બુકિંગ મેનેજમેન્ટ",
     bookings,
     status,
   });
@@ -288,12 +288,12 @@ router.post("/bookings/:id/status", (req, res) => {
   const booking = data.bookings.find((item) => item.id === req.params.id);
 
   if (!booking) {
-    setFlash(req, "error", "The booking could not be found.");
+    setFlash(req, "error", "બુકિંગ મળી નથી.");
     return res.redirect("/admin/bookings");
   }
 
   if (!["accepted", "rejected"].includes(status)) {
-    setFlash(req, "error", "Invalid booking status update.");
+    setFlash(req, "error", "બુકિંગની સ્થિતિ માટે અમાન્ય અપડેટ.");
     return res.redirect("/admin/bookings");
   }
 
@@ -315,7 +315,7 @@ router.post("/bookings/:id/status", (req, res) => {
       setFlash(
         req,
         "error",
-        "This request overlaps with another accepted booking for the same car."
+        "આ વિનંતી એ જ કારની બીજી મંજૂર થયેલી બુકિંગ સાથે અથડાય છે."
       );
       return res.redirect("/admin/bookings");
     }
@@ -327,7 +327,7 @@ router.post("/bookings/:id/status", (req, res) => {
   setFlash(
     req,
     "success",
-    `Booking ${status === "accepted" ? "accepted" : "rejected"} successfully.`
+    `બુકિંગ સફળતાપૂર્વક ${status === "accepted" ? "મંજૂર" : "નકારેલ"} કરી દેવામાં આવી.`
   );
   return res.redirect("/admin/bookings");
 });
@@ -343,7 +343,7 @@ router.get("/users", (req, res) => {
   }));
 
   res.render("admin/users", {
-    title: "Manage Users",
+    title: "વપરાશકર્તા મેનેજમેન્ટ",
     users,
   });
 });
@@ -353,12 +353,12 @@ router.post("/users/:id/status", (req, res) => {
   const user = data.users.find((item) => item.id === req.params.id);
 
   if (!user) {
-    setFlash(req, "error", "The requested user could not be found.");
+    setFlash(req, "error", "માગેલ વપરાશકર્તા મળ્યા નથી.");
     return res.redirect("/admin/users");
   }
 
   if (user.id === req.user.id) {
-    setFlash(req, "error", "You cannot deactivate your own admin account.");
+    setFlash(req, "error", "તમે તમારું પોતાનું એડમિન એકાઉન્ટ નિષ્ક્રિય કરી શકતા નથી.");
     return res.redirect("/admin/users");
   }
 
@@ -368,7 +368,7 @@ router.post("/users/:id/status", (req, res) => {
   setFlash(
     req,
     "success",
-    `${user.name} has been ${user.active ? "reactivated" : "deactivated"}.`
+    `${user.name} ને ${user.active ? "ફરી સક્રિય" : "નિષ્ક્રિય"} કરવામાં આવ્યા છે.`
   );
   return res.redirect("/admin/users");
 });
@@ -379,24 +379,24 @@ router.post("/users/:id/role", (req, res) => {
   const nextRole = req.body.role;
 
   if (!user) {
-    setFlash(req, "error", "The requested user could not be found.");
+    setFlash(req, "error", "માગેલ વપરાશકર્તા મળ્યા નથી.");
     return res.redirect("/admin/users");
   }
 
   if (!["user", "admin"].includes(nextRole)) {
-    setFlash(req, "error", "Invalid role selection.");
+    setFlash(req, "error", "અમાન્ય ભૂમિકા પસંદગી.");
     return res.redirect("/admin/users");
   }
 
   if (user.id === req.user.id && nextRole !== "admin") {
-    setFlash(req, "error", "You cannot remove your own admin access.");
+    setFlash(req, "error", "તમે તમારું પોતાનું એડમિન ઍક્સેસ દૂર કરી શકતા નથી.");
     return res.redirect("/admin/users");
   }
 
   user.role = nextRole;
   writeData(data);
 
-  setFlash(req, "success", `${user.name}'s role was updated to ${nextRole}.`);
+  setFlash(req, "success", `${user.name} ની ભૂમિકા ${nextRole === "admin" ? "એડમિન" : "વપરાશકર્તા"} તરીકે અપડેટ થઈ.`);
   return res.redirect("/admin/users");
 });
 

@@ -50,11 +50,11 @@ export function AuthScreen() {
   return (
     <Screen>
       <Panel>
-        <Eyebrow>Android experience</Eyebrow>
-        <HeroTitle>{APP_NAME} on mobile</HeroTitle>
+        <Eyebrow>એન્ડ્રોઇડ અનુભવ</Eyebrow>
+        <HeroTitle>{APP_NAME} હવે મોબાઇલમાં</HeroTitle>
         <BodyText>
-          Sign in as a customer or admin, browse the fleet, manage bookings, and run the rental
-          operation from a proper Android app shell.
+          ગ્રાહક અથવા એડમિન તરીકે સાઇન ઇન કરો, ફ્લીટ જુઓ, બુકિંગ મેનેજ કરો અને યોગ્ય
+          એન્ડ્રોઇડ એપમાંથી આખું રેન્ટલ સંચાલન કરો.
         </BodyText>
       </Panel>
 
@@ -65,7 +65,7 @@ export function AuthScreen() {
             style={[styles.toggleButton, mode === "login" && styles.toggleButtonActive]}
           >
             <Text style={[styles.toggleText, mode === "login" && styles.toggleTextActive]}>
-              Login
+              લોગિન
             </Text>
           </Pressable>
           <Pressable
@@ -73,17 +73,17 @@ export function AuthScreen() {
             style={[styles.toggleButton, mode === "signup" && styles.toggleButtonActive]}
           >
             <Text style={[styles.toggleText, mode === "signup" && styles.toggleTextActive]}>
-              Sign Up
+              સાઇન અપ
             </Text>
           </Pressable>
         </View>
 
         {mode === "signup" ? (
-          <TextField label="Full name" value={name} onChangeText={setName} placeholder="Aarav Mehta" />
+          <TextField label="પૂર્ણ નામ" value={name} onChangeText={setName} placeholder="આરવ મહેતા" />
         ) : null}
 
         <TextField
-          label="Email"
+          label="ઇમેઇલ"
           value={email}
           onChangeText={setEmail}
           placeholder="name@example.com"
@@ -94,21 +94,21 @@ export function AuthScreen() {
         {mode === "signup" ? (
           <>
             <TextField
-              label="Mobile number"
+              label="મોબાઇલ નંબર"
               value={phone}
               onChangeText={setPhone}
               placeholder="9876543210"
               keyboardType="phone-pad"
             />
-            <TextField label="City" value={city} onChangeText={setCity} placeholder="Bengaluru" />
+            <TextField label="શહેર" value={city} onChangeText={setCity} placeholder="બેંગલુરુ" />
           </>
         ) : null}
 
         <TextField
-          label="Password"
+          label="પાસવર્ડ"
           value={password}
           onChangeText={setPassword}
-          placeholder="Minimum 6 characters"
+          placeholder="ઓછામાં ઓછા 6 અક્ષર"
           secureTextEntry
           autoCapitalize="none"
         />
@@ -116,17 +116,17 @@ export function AuthScreen() {
         {error ? <Text style={styles.errorText}>{error}</Text> : null}
 
         <ActionButton
-          label={submitting ? "Please wait..." : mode === "login" ? "Login" : "Create Account"}
+          label={submitting ? "કૃપા કરીને રાહ જુઓ..." : mode === "login" ? "લોગિન" : "એકાઉન્ટ બનાવો"}
           onPress={handleSubmit}
           disabled={submitting}
         />
       </Panel>
 
       <Panel>
-        <Eyebrow>Demo accounts</Eyebrow>
-        <BodyText>User: aarav@example.com / user123</BodyText>
-        <BodyText>Admin: admin@drivemint.com / admin123</BodyText>
-        <BodyText style={styles.apiHint}>API base: {API_BASE_URL}</BodyText>
+        <Eyebrow>ડેમો એકાઉન્ટ્સ</Eyebrow>
+        <BodyText>વપરાશકર્તા: aarav@example.com / user123</BodyText>
+        <BodyText>એડમિન: admin@drivemint.com / admin123</BodyText>
+        <BodyText style={styles.apiHint}>API સરનામું: {API_BASE_URL}</BodyText>
       </Panel>
     </Screen>
   );

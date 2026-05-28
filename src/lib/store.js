@@ -147,7 +147,7 @@ function getDefaultData() {
   const users = [
     {
       id: "user_admin",
-      name: "DriveMint Admin",
+      name: "DriveMint એડમિન",
       email: "admin@drivemint.com",
       phone: "9999999999",
       city: "Delhi",
@@ -158,7 +158,7 @@ function getDefaultData() {
     },
     {
       id: "user_demo",
-      name: "Aarav Mehta",
+      name: "આરવ મહેતા",
       email: "aarav@example.com",
       phone: "9876543210",
       city: "Bengaluru",
@@ -187,7 +187,7 @@ function getDefaultData() {
       days: 3,
       totalPrice: 18300,
       status: "accepted",
-      note: "Need doorstep pickup near Hitech City.",
+      note: "હાઇટેક સિટી પાસે ડોરસ્ટેપ પિકઅપ જોઈએ.",
       createdAt: now,
     },
     {
@@ -207,7 +207,7 @@ function getDefaultData() {
       days: 2,
       totalPrice: 6400,
       status: "pending",
-      note: "Business meeting run.",
+      note: "બિઝનેસ મીટિંગ માટેની મુસાફરી.",
       createdAt: now,
     },
   ];

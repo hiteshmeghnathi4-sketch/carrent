@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Alert, Image, Pressable, StyleSheet, Text, View } from "react-native";
+import { Alert, StyleSheet, Text, View } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { apiRequest } from "../api";
 import { useAuth } from "../context/AuthContext";
@@ -99,80 +99,80 @@ export function AdminCarFormScreen({ navigation, route }) {
   }
 
   function toggleValue(current, setter, label) {
-    Alert.alert(label, `Set ${label.toLowerCase()} to ${current ? "off" : "on"}?`, [
-      { text: "Cancel", style: "cancel" },
-      { text: "Confirm", onPress: () => setter(!current) },
+    Alert.alert(label, `${label} ને ${current ? "બંધ" : "ચાલુ"} કરવું છે?`, [
+      { text: "રદ કરો", style: "cancel" },
+      { text: "પુષ્ટિ કરો", onPress: () => setter(!current) },
     ]);
   }
 
   return (
     <Screen>
       <Panel>
-        <Eyebrow>{isEdit ? "Edit fleet entry" : "Add fleet entry"}</Eyebrow>
-        <HeroTitle>{isEdit ? `Update ${existingCar?.name}` : "Create a new car listing"}</HeroTitle>
-        <BodyText>Upload a gallery photo or keep using an external image URL as a fallback.</BodyText>
+        <Eyebrow>{isEdit ? "ફ્લીટ એન્ટ્રી સંપાદિત કરો" : "ફ્લીટ એન્ટ્રી ઉમેરો"}</Eyebrow>
+        <HeroTitle>{isEdit ? `${existingCar?.name} અપડેટ કરો` : "નવી કાર લિસ્ટિંગ બનાવો"}</HeroTitle>
+        <BodyText>ગેલેરીમાંથી ફોટો અપલોડ કરો અથવા જરૂર હોય તો ઇમેજ URL નો ઉપયોગ કરો.</BodyText>
       </Panel>
 
       <Panel>
-        <TextField label="Car name" value={name} onChangeText={setName} placeholder="Compass Trailhawk" />
-        <TextField label="Brand" value={brand} onChangeText={setBrand} placeholder="Jeep" />
-        <TextField label="City" value={city} onChangeText={setCity} placeholder="Delhi" />
-        <TextField label="Category" value={category} onChangeText={setCategory} placeholder="SUV" />
+        <TextField label="કારનું નામ" value={name} onChangeText={setName} placeholder="Compass Trailhawk" />
+        <TextField label="બ્રાન્ડ" value={brand} onChangeText={setBrand} placeholder="Jeep" />
+        <TextField label="શહેર" value={city} onChangeText={setCity} placeholder="દિલ્હી" />
+        <TextField label="કેટેગરી" value={category} onChangeText={setCategory} placeholder="એસયુવી" />
         <TextField
-          label="Transmission"
+          label="ટ્રાન્સમિશન"
           value={transmission}
           onChangeText={setTransmission}
-          placeholder="Automatic"
+          placeholder="ઓટોમેટિક"
         />
-        <TextField label="Fuel" value={fuel} onChangeText={setFuel} placeholder="Petrol" />
-        <TextField label="Seats" value={seats} onChangeText={setSeats} placeholder="5" keyboardType="numeric" />
+        <TextField label="ફ્યુઅલ" value={fuel} onChangeText={setFuel} placeholder="પેટ્રોલ" />
+        <TextField label="બેઠકો" value={seats} onChangeText={setSeats} placeholder="5" keyboardType="numeric" />
         <TextField
-          label="Price per day"
+          label="દિવસ દીઠ કિંમત"
           value={pricePerDay}
           onChangeText={setPricePerDay}
           placeholder="5200"
           keyboardType="numeric"
         />
         <TextField
-          label="Image URL"
+          label="ઇમેજ URL"
           value={image}
           onChangeText={setImage}
-          placeholder="Optional if you choose a photo below"
+          placeholder="નીચે ફોટો પસંદ કરો તો આ વૈકલ્પિક છે"
           keyboardType="url"
           autoCapitalize="none"
         />
         <TextField
-          label="Description"
+          label="વર્ણન"
           value={description}
           onChangeText={setDescription}
-          placeholder="Tell customers what makes this car a strong pick."
+          placeholder="ગ્રાહકોને આ કાર કેમ સારી પસંદગી છે તે લખો."
           multiline
         />
 
         <View style={styles.toggleRow}>
           <ActionButton
-            label={available ? "Available: On" : "Available: Off"}
-            onPress={() => toggleValue(available, setAvailable, "Availability")}
+            label={available ? "ઉપલબ્ધ: ચાલુ" : "ઉપલબ્ધ: બંધ"}
+            onPress={() => toggleValue(available, setAvailable, "ઉપલબ્ધતા")}
             variant="secondary"
           />
           <ActionButton
-            label={featured ? "Featured: On" : "Featured: Off"}
-            onPress={() => toggleValue(featured, setFeatured, "Featured flag")}
+            label={featured ? "ફીચર્ડ: ચાલુ" : "ફીચર્ડ: બંધ"}
+            onPress={() => toggleValue(featured, setFeatured, "ફીચર્ડ ફ્લેગ")}
             variant="secondary"
           />
         </View>
 
-        <ActionButton label="Choose car photo" onPress={pickPhoto} variant="secondary" />
+        <ActionButton label="કારનો ફોટો પસંદ કરો" onPress={pickPhoto} variant="secondary" />
 
         <PhotoPreview
-          label="Current preview"
+          label="હાલનું પ્રિવ્યુ"
           uri={photo?.uri || existingCar?.imageUrl || (image ? image : "")}
         />
 
         {error ? <Text style={styles.errorText}>{error}</Text> : null}
 
         <ActionButton
-          label={saving ? "Saving..." : isEdit ? "Save car changes" : "Add car"}
+          label={saving ? "સંગ્રહિત થઈ રહ્યું છે..." : isEdit ? "કારમાં ફેરફાર સંગ્રહિત કરો" : "કાર ઉમેરો"}
           onPress={submitCar}
           disabled={saving}
         />

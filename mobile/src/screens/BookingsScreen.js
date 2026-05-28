@@ -3,9 +3,19 @@ import { Image, RefreshControl, StyleSheet, Text, View } from "react-native";
 import { useIsFocused } from "@react-navigation/native";
 import { apiRequest } from "../api";
 import { useAuth } from "../context/AuthContext";
-import { Screen, Panel, Eyebrow, HeroTitle, BodyText, StatusPill, EmptyPanel, LoadingPanel } from "../components";
+import {
+  Screen,
+  Panel,
+  Eyebrow,
+  HeroTitle,
+  BodyText,
+  StatusPill,
+  EmptyPanel,
+  LoadingPanel,
+} from "../components";
+import { formatDays, translateCity } from "../i18n";
 import { colors, fonts, spacing } from "../theme";
-import { formatCurrency, getErrorMessage } from "../utils";
+import { formatCurrency, formatDateRange, getErrorMessage } from "../utils";
 
 export function BookingsScreen() {
   const { token } = useAuth();
@@ -43,7 +53,7 @@ export function BookingsScreen() {
   if (loading) {
     return (
       <Screen scroll={false}>
-        <LoadingPanel title="Loading bookings" message="Pulling your latest booking history." />
+        <LoadingPanel title="બુકિંગ્સ લોડ થઈ રહી છે" message="તમારો તાજો બુકિંગ ઇતિહાસ લાવવામાં આવી રહ્યો છે." />
       </Screen>
     );
   }
@@ -51,14 +61,14 @@ export function BookingsScreen() {
   return (
     <Screen refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => loadBookings(true)} />}>
       <Panel>
-        <Eyebrow>Booking history</Eyebrow>
-        <HeroTitle>Track every request and approval from one timeline.</HeroTitle>
-        <BodyText>Pending, accepted, and rejected statuses all stay visible inside the app.</BodyText>
+        <Eyebrow>બુકિંગ ઇતિહાસ</Eyebrow>
+        <HeroTitle>એક જ સમયરેખામાં બધી વિનંતીઓ અને મંજૂરીઓ જુઓ.</HeroTitle>
+        <BodyText>બાકી, મંજૂર અને નકારેલ બધી સ્થિતિઓ એપમાં જ દેખાય છે.</BodyText>
         {error ? <Text style={styles.errorText}>{error}</Text> : null}
       </Panel>
 
       {!bookings.length ? (
-        <EmptyPanel title="No bookings yet" message="Place your first booking from the Cars tab." />
+        <EmptyPanel title="હજુ સુધી કોઈ બુકિંગ નથી" message="કાર્સ ટેબમાંથી તમારી પ્રથમ બુકિંગ કરો." />
       ) : null}
 
       {bookings.map((booking) => (
@@ -67,16 +77,14 @@ export function BookingsScreen() {
           <View style={styles.bookingBody}>
             <View style={styles.headingRow}>
               <View style={styles.headingCopy}>
-                <Eyebrow>{booking.car?.city}</Eyebrow>
+                <Eyebrow>{translateCity(booking.car?.city)}</Eyebrow>
                 <HeroTitle style={styles.cardTitle}>{booking.car?.brand} {booking.car?.name}</HeroTitle>
               </View>
               <StatusPill status={booking.status} />
             </View>
-            <BodyText>
-              {booking.pickupDate} to {booking.returnDate} • {booking.days} day{booking.days > 1 ? "s" : ""}
-            </BodyText>
+            <BodyText>{formatDateRange(booking.pickupDate, booking.returnDate)} • {formatDays(booking.days)}</BodyText>
             <Text style={styles.amountText}>{formatCurrency(booking.totalPrice)}</Text>
-            {booking.note ? <BodyText>Note: {booking.note}</BodyText> : null}
+            {booking.note ? <BodyText>નોંધ: {booking.note}</BodyText> : null}
           </View>
         </Panel>
       ))}

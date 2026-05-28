@@ -7,50 +7,50 @@
     <img src="<%= car.image %>" alt="<%= car.name %>" />
     <div class="detail-card__content">
       <div class="car-card__topline">
-        <span class="pill"><%= car.city %></span>
-        <span class="pill pill-soft"><%= car.category %></span>
+        <span class="pill"><%= translateCity(car.city) %></span>
+        <span class="pill pill-soft"><%= translateCategory(car.category) %></span>
       </div>
       <h1><%= car.brand %> <%= car.name %></h1>
-      <p><%= car.description %></p>
+      <p><%= translateDescription(car.description) %></p>
       <div class="spec-row spec-row-large">
-        <span><%= car.transmission %></span>
-        <span><%= car.fuel %></span>
-        <span><%= car.seats %> seats</span>
+        <span><%= translateTransmission(car.transmission) %></span>
+        <span><%= translateFuel(car.fuel) %></span>
+        <span><%= formatSeats(car.seats) %></span>
       </div>
     </div>
   </article>
 
   <aside class="panel booking-panel">
-    <p class="eyebrow">Book this car</p>
-    <h2><%= formatCurrency(car.pricePerDay) %> per day</h2>
+    <p class="eyebrow">આ કાર બુક કરો</p>
+    <h2><%= formatCurrency(car.pricePerDay) %> પ્રતિ દિવસ</h2>
 
     <% if (user && !isAdmin) { %>
       <form action="/cars/<%= car.id %>/book" method="post" class="form-panel form-panel-tight">
         <label>
-          Pickup date
+          પિકઅપ તારીખ
           <input type="date" name="pickupDate" min="<%= new Date().toISOString().slice(0, 10) %>" required />
         </label>
 
         <label>
-          Return date
+          રિટર્ન તારીખ
           <input type="date" name="returnDate" min="<%= new Date().toISOString().slice(0, 10) %>" required />
         </label>
 
         <label>
-          Notes
-          <textarea name="note" rows="4" placeholder="Pickup preferences or trip details"></textarea>
+          નોંધ
+          <textarea name="note" rows="4" placeholder="પિકઅપ પસંદગીઓ અથવા મુસાફરીની વિગતો"></textarea>
         </label>
 
-        <button class="button" type="submit">Request Booking</button>
+        <button class="button" type="submit">બુકિંગ વિનંતી કરો</button>
       </form>
     <% } else if (isAdmin) { %>
-      <p class="empty-note">Admins can manage this car from the dashboard but cannot place customer bookings.</p>
-      <a class="button button-secondary" href="/admin/cars">Manage fleet</a>
+      <p class="empty-note">એડમિન આ કારને ડેશબોર્ડથી મેનેજ કરી શકે છે, પરંતુ ગ્રાહક બુકિંગ કરી શકતા નથી.</p>
+      <a class="button button-secondary" href="/admin/cars">ફ્લીટ મેનેજ કરો</a>
     <% } else { %>
-      <p class="empty-note">Login or sign up to request this car.</p>
+      <p class="empty-note">આ કાર માટે વિનંતી કરવા લોગિન કરો અથવા સાઇન અપ કરો.</p>
       <div class="stack-actions">
-        <a class="button" href="/login">Login</a>
-        <a class="button button-secondary" href="/signup">Create account</a>
+        <a class="button" href="/login">લોગિન</a>
+        <a class="button button-secondary" href="/signup">એકાઉન્ટ બનાવો</a>
       </div>
     <% } %>
   </aside>
@@ -58,16 +58,16 @@
 
 <section class="section-header">
   <div>
-    <p class="eyebrow">More in <%= car.city %></p>
-    <h2>Explore nearby alternatives.</h2>
+    <p class="eyebrow"><%= translateCity(car.city) %> માં વધુ વિકલ્પો</p>
+    <h2>નજીકના અન્ય વિકલ્પો જુઓ.</h2>
   </div>
 </section>
 
 <section class="card-grid">
   <% if (!relatedCars.length) { %>
     <article class="empty-state">
-      <h3>No related cars in this city yet.</h3>
-      <p>Browse the full fleet to view more options across other locations.</p>
+      <h3>આ શહેરમાં સંબંધિત કાર્સ હજી ઉપલબ્ધ નથી.</h3>
+      <p>અન્ય સ્થળોના વધુ વિકલ્પો જોવા માટે સંપૂર્ણ ફ્લીટ જુઓ.</p>
     </article>
   <% } %>
 
@@ -76,13 +76,13 @@
       <img src="<%= related.image %>" alt="<%= related.name %>" />
       <div class="car-card__body">
         <div class="car-card__topline">
-          <span class="pill"><%= related.city %></span>
-          <span class="pill pill-soft"><%= related.category %></span>
+          <span class="pill"><%= translateCity(related.city) %></span>
+          <span class="pill pill-soft"><%= translateCategory(related.category) %></span>
         </div>
         <h3><%= related.brand %> <%= related.name %></h3>
         <div class="price-row">
           <strong><%= formatCurrency(related.pricePerDay) %></strong>
-          <a class="button button-secondary" href="/cars/<%= related.id %>">View</a>
+          <a class="button button-secondary" href="/cars/<%= related.id %>">જુઓ</a>
         </div>
       </div>
     </article>

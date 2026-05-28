@@ -90,7 +90,7 @@ export function ProfileScreen() {
   if (loading) {
     return (
       <Screen scroll={false}>
-        <LoadingPanel title="Loading profile" message="Syncing your account details and booking summary." />
+        <LoadingPanel title="પ્રોફાઇલ લોડ થઈ રહી છે" message="તમારી એકાઉન્ટ વિગતો અને બુકિંગ સારાંશ સમન્વયિત થઈ રહ્યા છે." />
       </Screen>
     );
   }
@@ -98,23 +98,23 @@ export function ProfileScreen() {
   return (
     <Screen refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => loadProfile(true)} />}>
       <Panel>
-        <Eyebrow>Profile management</Eyebrow>
-        <HeroTitle>Keep your account details current.</HeroTitle>
+        <Eyebrow>પ્રોફાઇલ મેનેજમેન્ટ</Eyebrow>
+        <HeroTitle>તમારી એકાઉન્ટ વિગતો અપડેટ રાખો.</HeroTitle>
         <BodyText>
-          Update your contact info, change password when needed, and sign out safely from the app.
+          સંપર્ક માહિતી અપડેટ કરો, જરૂર પડે ત્યારે પાસવર્ડ બદલો અને એપમાંથી સુરક્ષિત રીતે લોગઆઉટ કરો.
         </BodyText>
       </Panel>
 
       <View style={styles.metricGrid}>
-        <MetricCard label="Total bookings" value={String(summary?.total || 0)} />
-        <MetricCard label="Accepted" value={String(summary?.accepted || 0)} />
-        <MetricCard label="Pending" value={String(summary?.pending || 0)} accent />
+        <MetricCard label="કુલ બુકિંગ્સ" value={String(summary?.total || 0)} />
+        <MetricCard label="મંજૂર" value={String(summary?.accepted || 0)} />
+        <MetricCard label="બાકી" value={String(summary?.pending || 0)} accent />
       </View>
 
       <Panel>
-        <TextField label="Full name" value={name} onChangeText={setName} placeholder="Your name" />
+        <TextField label="પૂર્ણ નામ" value={name} onChangeText={setName} placeholder="તમારું નામ" />
         <TextField
-          label="Email"
+          label="ઇમેઇલ"
           value={email}
           onChangeText={setEmail}
           placeholder="name@example.com"
@@ -122,26 +122,26 @@ export function ProfileScreen() {
           autoCapitalize="none"
         />
         <TextField
-          label="Mobile number"
+          label="મોબાઇલ નંબર"
           value={phone}
           onChangeText={setPhone}
           placeholder="9876543210"
           keyboardType="phone-pad"
         />
-        <TextField label="City" value={city} onChangeText={setCity} placeholder="Your city" />
+        <TextField label="શહેર" value={city} onChangeText={setCity} placeholder="તમારું શહેર" />
         <TextField
-          label="New password"
+          label="નવો પાસવર્ડ"
           value={password}
           onChangeText={setPassword}
-          placeholder="Leave blank to keep the current password"
+          placeholder="હાલનો પાસવર્ડ જાળવવા માટે ખાલી રાખો"
           secureTextEntry
           autoCapitalize="none"
         />
 
         {error ? <Text style={styles.errorText}>{error}</Text> : null}
 
-        <ActionButton label={saving ? "Saving..." : "Save changes"} onPress={saveProfile} disabled={saving} />
-        <ActionButton label="Logout" onPress={signOut} variant="secondary" />
+        <ActionButton label={saving ? "સંગ્રહિત થઈ રહ્યું છે..." : "ફેરફાર સંગ્રહિત કરો"} onPress={saveProfile} disabled={saving} />
+        <ActionButton label="લોગઆઉટ" onPress={signOut} variant="secondary" />
       </Panel>
     </Screen>
   );

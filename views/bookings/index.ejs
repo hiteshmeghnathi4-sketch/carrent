@@ -4,17 +4,17 @@
 
 <section class="section-banner">
   <div>
-    <p class="eyebrow">Booking History</p>
-    <h1>Track every request and approval in one timeline.</h1>
+    <p class="eyebrow">બુકિંગ ઇતિહાસ</p>
+    <h1>બધી વિનંતીઓ અને મંજૂરીઓને એક જ સમયરેખામાં જુઓ.</h1>
   </div>
 </section>
 
 <section class="stack-list">
   <% if (!bookings.length) { %>
     <article class="empty-state">
-      <h2>No bookings yet.</h2>
-      <p>Browse the fleet and submit your first request.</p>
-      <a class="button" href="/cars">Browse Cars</a>
+      <h2>હજુ સુધી કોઈ બુકિંગ નથી.</h2>
+      <p>ફ્લીટ જુઓ અને તમારી પ્રથમ વિનંતી મોકલો.</p>
+      <a class="button" href="/cars">કાર્સ જુઓ</a>
     </article>
   <% } %>
 
@@ -24,33 +24,33 @@
       <div class="booking-card__body">
         <div class="booking-card__topline">
           <div>
-            <p class="eyebrow">Booked car</p>
+            <p class="eyebrow">બુક કરેલી કાર</p>
             <h3><%= booking.displayCar.brand %> <%= booking.displayCar.name %></h3>
           </div>
-          <span class="status-badge status-<%= booking.status %>"><%= booking.status %></span>
+          <span class="status-badge status-<%= booking.status %>"><%= translateStatus(booking.status) %></span>
         </div>
 
         <div class="detail-grid">
           <div>
-            <span>City</span>
-            <strong><%= booking.displayCar.city %></strong>
+            <span>શહેર</span>
+            <strong><%= translateCity(booking.displayCar.city) %></strong>
           </div>
           <div>
-            <span>Dates</span>
-            <strong><%= booking.pickupDate %> to <%= booking.returnDate %></strong>
+            <span>તારીખો</span>
+            <strong><%= formatDateRange(booking.pickupDate, booking.returnDate) %></strong>
           </div>
           <div>
-            <span>Duration</span>
-            <strong><%= booking.days %> day<%= booking.days > 1 ? "s" : "" %></strong>
+            <span>અવધિ</span>
+            <strong><%= formatDays(booking.days) %></strong>
           </div>
           <div>
-            <span>Total</span>
+            <span>કુલ</span>
             <strong><%= formatCurrency(booking.totalPrice) %></strong>
           </div>
         </div>
 
         <% if (booking.note) { %>
-          <p class="booking-note"><strong>Note:</strong> <%= booking.note %></p>
+          <p class="booking-note"><strong>નોંધ:</strong> <%= booking.note %></p>
         <% } %>
       </div>
     </article>

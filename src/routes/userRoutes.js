@@ -20,17 +20,17 @@ router.post("/cars/:id/book", requireAuth, (req, res) => {
   const car = data.cars.find((item) => item.id === req.params.id);
 
   if (!car || !car.available) {
-    setFlash(req, "error", "That car is not available right now.");
+    setFlash(req, "error", "આ કાર હાલમાં ઉપલબ્ધ નથી.");
     return res.redirect("/cars");
   }
 
   if (!pickupDate || !returnDate) {
-    setFlash(req, "error", "Please choose both pickup and return dates.");
+    setFlash(req, "error", "કૃપા કરીને પિકઅપ અને રિટર્નની બંને તારીખો પસંદ કરો.");
     return res.redirect(`/cars/${car.id}`);
   }
 
   if (pickupDate < today || returnDate < pickupDate) {
-    setFlash(req, "error", "Please select a valid future date range.");
+    setFlash(req, "error", "કૃપા કરીને માન્ય ભવિષ્ય તારીખ શ્રેણી પસંદ કરો.");
     return res.redirect(`/cars/${car.id}`);
   }
 
@@ -50,7 +50,7 @@ router.post("/cars/:id/book", requireAuth, (req, res) => {
     setFlash(
       req,
       "error",
-      "Those dates overlap with an accepted booking. Please choose another range."
+      "આ તારીખો પહેલેથી મંજૂર થયેલી બુકિંગ સાથે મેળ ખાય છે. કૃપા કરીને બીજી તારીખો પસંદ કરો."
     );
     return res.redirect(`/cars/${car.id}`);
   }
@@ -79,7 +79,7 @@ router.post("/cars/:id/book", requireAuth, (req, res) => {
   data.bookings.push(newBooking);
   writeData(data);
 
-  setFlash(req, "success", "Booking request submitted. We will review it shortly.");
+  setFlash(req, "success", "બુકિંગ વિનંતી મોકલાઈ ગઈ છે. અમે ટૂંક સમયમાં તેની સમીક્ષા કરીશું.");
   return res.redirect("/bookings");
 });
 
@@ -90,7 +90,7 @@ router.get("/bookings", requireAuth, (req, res) => {
     .sort((left, right) => new Date(right.createdAt) - new Date(left.createdAt));
 
   res.render("bookings/index", {
-    title: "Booking History",
+    title: "બુકિંગ ઇતિહાસ",
     bookings,
   });
 });
@@ -100,7 +100,7 @@ router.get("/profile", requireAuth, (req, res) => {
   const userBookings = data.bookings.filter((booking) => booking.userId === req.user.id);
 
   res.render("profile", {
-    title: "Your Profile",
+    title: "તમારી પ્રોફાઇલ",
     bookingSummary: {
       total: userBookings.length,
       accepted: userBookings.filter((booking) => booking.status === "accepted").length,
@@ -115,7 +115,7 @@ router.post("/profile", requireAuth, async (req, res) => {
   const user = data.users.find((item) => item.id === req.user.id);
 
   if (!user) {
-    setFlash(req, "error", "Your session expired. Please log in again.");
+    setFlash(req, "error", "તમારું સેશન સમાપ્ત થયું છે. કૃપા કરીને ફરી લોગિન કરો.");
     return res.redirect("/login");
   }
 
@@ -125,12 +125,12 @@ router.post("/profile", requireAuth, async (req, res) => {
   const cleanedCity = String(city || "").trim();
 
   if (!cleanedName || !normalizedEmail || !cleanedPhone || !cleanedCity) {
-    setFlash(req, "error", "Please complete all profile fields.");
+    setFlash(req, "error", "કૃપા કરીને પ્રોફાઇલના બધા ફીલ્ડ ભરો.");
     return res.redirect("/profile");
   }
 
   if (password && String(password).length < 6) {
-    setFlash(req, "error", "New password should be at least 6 characters long.");
+    setFlash(req, "error", "નવો પાસવર્ડ ઓછામાં ઓછા 6 અક્ષરનો હોવો જોઈએ.");
     return res.redirect("/profile");
   }
 
@@ -139,7 +139,7 @@ router.post("/profile", requireAuth, async (req, res) => {
   );
 
   if (emailTaken) {
-    setFlash(req, "error", "That email is already being used by another account.");
+    setFlash(req, "error", "આ ઇમેઇલ પહેલેથી જ બીજા એકાઉન્ટમાં ઉપયોગમાં છે.");
     return res.redirect("/profile");
   }
 
@@ -153,7 +153,7 @@ router.post("/profile", requireAuth, async (req, res) => {
   }
 
   writeData(data);
-  setFlash(req, "success", "Your profile was updated successfully.");
+  setFlash(req, "success", "તમારી પ્રોફાઇલ સફળતાપૂર્વક અપડેટ થઈ ગઈ.");
   return res.redirect("/profile");
 });
 

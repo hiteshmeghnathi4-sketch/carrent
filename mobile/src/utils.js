@@ -1,5 +1,5 @@
 export function formatCurrency(value) {
-  return new Intl.NumberFormat("en-IN", {
+  return new Intl.NumberFormat("gu-IN", {
     style: "currency",
     currency: "INR",
     maximumFractionDigits: 0,
@@ -11,11 +11,20 @@ export function formatReadableDate(value) {
     return "";
   }
 
-  return new Date(value).toLocaleDateString("en-IN", {
+  const date =
+    typeof value === "string" && /^\d{4}-\d{2}-\d{2}$/.test(value)
+      ? new Date(`${value}T00:00:00`)
+      : new Date(value);
+
+  return date.toLocaleDateString("gu-IN", {
     day: "numeric",
     month: "short",
     year: "numeric",
   });
+}
+
+export function formatDateRange(start, end) {
+  return `${formatReadableDate(start)} થી ${formatReadableDate(end)}`;
 }
 
 export function formatInputDate(date) {
@@ -41,5 +50,5 @@ export function addDays(date, amount) {
 }
 
 export function getErrorMessage(error) {
-  return error?.message || "Something went wrong. Please try again.";
+  return error?.message || "કૈંક ખોટું થયું છે. કૃપા કરીને ફરી પ્રયત્ન કરો.";
 }

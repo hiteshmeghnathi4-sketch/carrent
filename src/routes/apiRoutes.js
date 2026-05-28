@@ -101,7 +101,7 @@ function validateCarPayload(payload) {
     !payload.image ||
     !payload.pricePerDay
   ) {
-    return "Please fill in all required car details, including a car photo.";
+    return "કૃપા કરીને કારની બધી જરૂરી વિગતો, સહિત ફોટો, ભરો.";
   }
 
   return "";
@@ -123,17 +123,17 @@ router.post("/auth/signup", async (req, res) => {
   const password = String(req.body.password || "");
 
   if (!cleanedName || !cleanedEmail || !cleanedPhone || !cleanedCity || !password) {
-    return respondError(res, 400, "Please complete every signup field.");
+    return respondError(res, 400, "કૃપા કરીને સાઇનઅપના બધા ફીલ્ડ ભરો.");
   }
 
   if (password.length < 6) {
-    return respondError(res, 400, "Password should be at least 6 characters long.");
+    return respondError(res, 400, "પાસવર્ડ ઓછામાં ઓછા 6 અક્ષરનો હોવો જોઈએ.");
   }
 
   const existingUser = data.users.find((user) => user.email.toLowerCase() === cleanedEmail);
 
   if (existingUser) {
-    return respondError(res, 409, "An account with that email already exists.");
+    return respondError(res, 409, "આ ઇમેઇલ સાથેનું એકાઉન્ટ પહેલેથી જ ઉપલબ્ધ છે.");
   }
 
   const newUser = {
@@ -161,23 +161,23 @@ router.post("/auth/login", async (req, res) => {
   const password = String(req.body.password || "");
 
   if (!cleanedEmail || !password) {
-    return respondError(res, 400, "Please enter both email and password.");
+    return respondError(res, 400, "કૃપા કરીને ઇમેઇલ અને પાસવર્ડ બંને દાખલ કરો.");
   }
 
   const user = data.users.find((item) => item.email.toLowerCase() === cleanedEmail);
 
   if (!user) {
-    return respondError(res, 404, "No account was found for that email.");
+    return respondError(res, 404, "આ ઇમેઇલ માટે કોઈ એકાઉન્ટ મળ્યું નથી.");
   }
 
   if (!user.active) {
-    return respondError(res, 403, "This account is currently inactive.");
+    return respondError(res, 403, "આ એકાઉન્ટ હાલમાં નિષ્ક્રિય છે.");
   }
 
   const matches = await bcrypt.compare(password, user.passwordHash);
 
   if (!matches) {
-    return respondError(res, 401, "Incorrect password. Please try again.");
+    return respondError(res, 401, "પાસવર્ડ ખોટો છે. કૃપા કરીને ફરી પ્રયત્ન કરો.");
   }
 
   const token = issueApiToken(data, user.id);
@@ -198,7 +198,7 @@ router.post("/auth/logout", requireApiAuth, (req, res) => {
   writeData(data);
 
   return res.json({
-    message: "Logged out successfully.",
+    message: "સફળતાપૂર્વક લોગઆઉટ થયું.",
   });
 });
 
@@ -223,7 +223,7 @@ router.get("/cars/:id", (req, res) => {
   const car = data.cars.find((item) => item.id === req.params.id);
 
   if (!car) {
-    return respondError(res, 404, "That car is no longer available in the catalog.");
+    return respondError(res, 404, "આ કાર હવે કેટલોગમાં ઉપલબ્ધ નથી.");
   }
 
   const relatedCars = data.cars
@@ -248,7 +248,7 @@ router.get("/bookings", requireApiAuth, (req, res) => {
 
 router.post("/bookings", requireApiAuth, (req, res) => {
   if (req.apiUser.role !== "user") {
-    return respondError(res, 403, "Only customer accounts can place bookings.");
+    return respondError(res, 403, "ફક્ત ગ્રાહક એકાઉન્ટ્સ જ બુકિંગ કરી શકે છે.");
   }
 
   const { carId, pickupDate, returnDate, note } = req.body;
@@ -257,15 +257,15 @@ router.post("/bookings", requireApiAuth, (req, res) => {
   const car = data.cars.find((item) => item.id === carId);
 
   if (!car || !car.available) {
-    return respondError(res, 404, "That car is not available right now.");
+    return respondError(res, 404, "આ કાર હાલમાં ઉપલબ્ધ નથી.");
   }
 
   if (!pickupDate || !returnDate) {
-    return respondError(res, 400, "Please choose both pickup and return dates.");
+    return respondError(res, 400, "કૃપા કરીને પિકઅપ અને રિટર્નની બંને તારીખો પસંદ કરો.");
   }
 
   if (pickupDate < today || returnDate < pickupDate) {
-    return respondError(res, 400, "Please select a valid future date range.");
+    return respondError(res, 400, "કૃપા કરીને માન્ય ભવિષ્ય તારીખ શ્રેણી પસંદ કરો.");
   }
 
   const acceptedConflict = data.bookings.some(
@@ -279,7 +279,7 @@ router.post("/bookings", requireApiAuth, (req, res) => {
     return respondError(
       res,
       409,
-      "Those dates overlap with an accepted booking. Please choose another range."
+      "આ તારીખો પહેલેથી મંજૂર થયેલી બુકિંગ સાથે મેળ ખાય છે. કૃપા કરીને બીજી તારીખો પસંદ કરો."
     );
   }
 
@@ -308,7 +308,7 @@ router.post("/bookings", requireApiAuth, (req, res) => {
   writeData(data);
 
   return res.status(201).json({
-    message: "Booking request submitted. We will review it shortly.",
+    message: "બુકિંગ વિનંતી મોકલાઈ ગઈ છે. અમે ટૂંક સમયમાં તેની સમીક્ષા કરીશું.",
     booking: serializeBooking(req, {
       ...newBooking,
       car,
@@ -342,11 +342,11 @@ router.put("/profile", requireApiAuth, async (req, res) => {
   const password = String(req.body.password || "");
 
   if (!cleanedName || !normalizedEmail || !cleanedPhone || !cleanedCity) {
-    return respondError(res, 400, "Please complete all profile fields.");
+    return respondError(res, 400, "કૃપા કરીને પ્રોફાઇલના બધા ફીલ્ડ ભરો.");
   }
 
   if (password && password.length < 6) {
-    return respondError(res, 400, "New password should be at least 6 characters long.");
+    return respondError(res, 400, "નવો પાસવર્ડ ઓછામાં ઓછા 6 અક્ષરનો હોવો જોઈએ.");
   }
 
   const emailTaken = data.users.some(
@@ -354,7 +354,7 @@ router.put("/profile", requireApiAuth, async (req, res) => {
   );
 
   if (emailTaken) {
-    return respondError(res, 409, "That email is already being used by another account.");
+    return respondError(res, 409, "આ ઇમેઇલ પહેલેથી જ બીજા એકાઉન્ટમાં ઉપયોગમાં છે.");
   }
 
   user.name = cleanedName;
@@ -369,7 +369,7 @@ router.put("/profile", requireApiAuth, async (req, res) => {
   writeData(data);
 
   return res.json({
-    message: "Your profile was updated successfully.",
+    message: "તમારી પ્રોફાઇલ સફળતાપૂર્વક અપડેટ થઈ ગઈ.",
     user: sanitizeUser(user),
   });
 });
@@ -434,7 +434,7 @@ router.post("/admin/cars", requireApiAdmin, uploadCarPhotoApi, (req, res) => {
   writeData(data);
 
   return res.status(201).json({
-    message: "Car added to the fleet.",
+    message: "કાર ફ્લીટમાં ઉમેરાઈ ગઈ.",
     car: serializeCar(req, car),
   });
 });
@@ -445,7 +445,7 @@ router.put("/admin/cars/:id", requireApiAdmin, uploadCarPhotoApi, (req, res) => 
 
   if (!car) {
     cleanupRequestFile(req.file);
-    return respondError(res, 404, "The requested car could not be found.");
+    return respondError(res, 404, "માગેલી કાર મળી નથી.");
   }
 
   const payload = buildCarPayload(req, car.image);
@@ -466,7 +466,7 @@ router.put("/admin/cars/:id", requireApiAdmin, uploadCarPhotoApi, (req, res) => 
   }
 
   return res.json({
-    message: "Car details updated.",
+    message: "કારની વિગતો અપડેટ થઈ ગઈ.",
     car: serializeCar(req, car),
   });
 });
@@ -476,7 +476,7 @@ router.delete("/admin/cars/:id", requireApiAdmin, (req, res) => {
   const deletedCar = data.cars.find((item) => item.id === req.params.id);
 
   if (!deletedCar) {
-    return respondError(res, 404, "The requested car could not be found.");
+    return respondError(res, 404, "માગેલી કાર મળી નથી.");
   }
 
   data.cars = data.cars.filter((item) => item.id !== req.params.id);
@@ -484,7 +484,7 @@ router.delete("/admin/cars/:id", requireApiAdmin, (req, res) => {
   removeUploadedImage(deletedCar.image);
 
   return res.json({
-    message: "Car removed from the fleet.",
+    message: "કાર ફ્લીટમાંથી દૂર કરી દેવામાં આવી.",
   });
 });
 
@@ -509,11 +509,11 @@ router.patch("/admin/bookings/:id/status", requireApiAdmin, (req, res) => {
   const booking = data.bookings.find((item) => item.id === req.params.id);
 
   if (!booking) {
-    return respondError(res, 404, "The booking could not be found.");
+    return respondError(res, 404, "બુકિંગ મળી નથી.");
   }
 
   if (!["accepted", "rejected"].includes(nextStatus)) {
-    return respondError(res, 400, "Invalid booking status update.");
+    return respondError(res, 400, "બુકિંગની સ્થિતિ માટે અમાન્ય અપડેટ.");
   }
 
   if (nextStatus === "accepted") {
@@ -529,7 +529,7 @@ router.patch("/admin/bookings/:id/status", requireApiAdmin, (req, res) => {
       return respondError(
         res,
         409,
-        "This request overlaps with another accepted booking for the same car."
+        "આ વિનંતી એ જ કારની બીજી મંજૂર થયેલી બુકિંગ સાથે અથડાય છે."
       );
     }
   }
@@ -540,7 +540,7 @@ router.patch("/admin/bookings/:id/status", requireApiAdmin, (req, res) => {
   const decorated = decorateBookings([booking], data.cars, data.users)[0];
 
   return res.json({
-    message: `Booking ${nextStatus === "accepted" ? "accepted" : "rejected"} successfully.`,
+    message: `બુકિંગ સફળતાપૂર્વક ${nextStatus === "accepted" ? "મંજૂર" : "નકારેલ"} કરી દેવામાં આવી.`,
     booking: serializeBooking(req, decorated),
   });
 });
@@ -564,11 +564,11 @@ router.patch("/admin/users/:id/status", requireApiAdmin, (req, res) => {
   const user = data.users.find((item) => item.id === req.params.id);
 
   if (!user) {
-    return respondError(res, 404, "The requested user could not be found.");
+    return respondError(res, 404, "માગેલ વપરાશકર્તા મળ્યા નથી.");
   }
 
   if (user.id === req.apiUser.id) {
-    return respondError(res, 400, "You cannot deactivate your own admin account.");
+    return respondError(res, 400, "તમે તમારું પોતાનું એડમિન એકાઉન્ટ નિષ્ક્રિય કરી શકતા નથી.");
   }
 
   user.active = !user.active;
@@ -580,7 +580,7 @@ router.patch("/admin/users/:id/status", requireApiAdmin, (req, res) => {
   writeData(data);
 
   return res.json({
-    message: `${user.name} has been ${user.active ? "reactivated" : "deactivated"}.`,
+    message: `${user.name} ને ${user.active ? "ફરી સક્રિય" : "નિષ્ક્રિય"} કરવામાં આવ્યા છે.`,
     user: sanitizeUser(user),
   });
 });
@@ -591,22 +591,22 @@ router.patch("/admin/users/:id/role", requireApiAdmin, (req, res) => {
   const nextRole = String(req.body.role || "");
 
   if (!user) {
-    return respondError(res, 404, "The requested user could not be found.");
+    return respondError(res, 404, "માગેલ વપરાશકર્તા મળ્યા નથી.");
   }
 
   if (!["user", "admin"].includes(nextRole)) {
-    return respondError(res, 400, "Invalid role selection.");
+    return respondError(res, 400, "અમાન્ય ભૂમિકા પસંદગી.");
   }
 
   if (user.id === req.apiUser.id && nextRole !== "admin") {
-    return respondError(res, 400, "You cannot remove your own admin access.");
+    return respondError(res, 400, "તમે તમારું પોતાનું એડમિન ઍક્સેસ દૂર કરી શકતા નથી.");
   }
 
   user.role = nextRole;
   writeData(data);
 
   return res.json({
-    message: `${user.name}'s role was updated to ${nextRole}.`,
+    message: `${user.name} ની ભૂમિકા ${nextRole === "admin" ? "એડમિન" : "વપરાશકર્તા"} તરીકે અપડેટ થઈ.`,
     user: sanitizeUser(user),
   });
 });

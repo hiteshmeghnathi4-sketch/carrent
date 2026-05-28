@@ -4,30 +4,30 @@
 
 <section class="section-banner">
   <div>
-    <p class="eyebrow">Admin Dashboard</p>
-    <h1>Monitor fleet activity, booking load, and revenue at a glance.</h1>
+    <p class="eyebrow">એડમિન ડેશબોર્ડ</p>
+    <h1>ફ્લીટ પ્રવૃત્તિ, બુકિંગ લોડ અને આવકને એક નજરમાં જુઓ.</h1>
   </div>
 </section>
 
 <section class="dashboard-grid">
   <article class="stat-card stat-card-large">
-    <span>Total cars</span>
+    <span>કુલ કાર્સ</span>
     <strong><%= stats.cars %></strong>
   </article>
   <article class="stat-card stat-card-large">
-    <span>Registered users</span>
+    <span>નોંધાયેલા વપરાશકર્તાઓ</span>
     <strong><%= stats.users %></strong>
   </article>
   <article class="stat-card stat-card-large">
-    <span>Total bookings</span>
+    <span>કુલ બુકિંગ્સ</span>
     <strong><%= stats.bookings %></strong>
   </article>
   <article class="stat-card stat-card-large">
-    <span>Pending approvals</span>
+    <span>બાકી મંજૂરીઓ</span>
     <strong><%= stats.pendingBookings %></strong>
   </article>
   <article class="stat-card stat-card-large stat-card-accent">
-    <span>Accepted revenue</span>
+    <span>મંજૂર આવક</span>
     <strong><%= formatCurrency(stats.acceptedRevenue) %></strong>
   </article>
 </section>
@@ -36,21 +36,21 @@
   <article class="panel">
     <div class="panel-heading">
       <div>
-        <p class="eyebrow">Revenue dashboard</p>
-        <h2>City-wise earnings</h2>
+        <p class="eyebrow">આવક ડેશબોર્ડ</p>
+        <h2>શહેર પ્રમાણે આવક</h2>
       </div>
     </div>
 
     <div class="bar-list">
       <% const cityEntries = Object.entries(revenueByCity); %>
       <% if (!cityEntries.length) { %>
-        <p class="empty-note">Accepted bookings will surface here once admins approve them.</p>
+        <p class="empty-note">એડમિન મંજૂરી આપશે પછી મંજૂર બુકિંગ્સ અહીં દેખાશે.</p>
       <% } %>
       <% const peakRevenue = cityEntries.length ? Math.max(...cityEntries.map((entry) => entry[1])) : 1; %>
       <% cityEntries.forEach(([city, revenue]) => { %>
         <div class="bar-item">
           <div class="bar-item__meta">
-            <strong><%= city %></strong>
+            <strong><%= translateCity(city) %></strong>
             <span><%= formatCurrency(revenue) %></span>
           </div>
           <div class="bar-track">
@@ -64,30 +64,30 @@
   <article class="panel">
     <div class="panel-heading">
       <div>
-        <p class="eyebrow">Recent requests</p>
-        <h2>Latest bookings</h2>
+        <p class="eyebrow">તાજેતરની વિનંતીઓ</p>
+        <h2>નવીનતમ બુકિંગ્સ</h2>
       </div>
-      <a class="button button-secondary" href="/admin/bookings">Review all</a>
+      <a class="button button-secondary" href="/admin/bookings">બધું જુઓ</a>
     </div>
 
     <div class="table-shell">
       <table>
         <thead>
           <tr>
-            <th>User</th>
-            <th>Car</th>
-            <th>Dates</th>
-            <th>Status</th>
-            <th>Total</th>
+            <th>વપરાશકર્તા</th>
+            <th>કાર</th>
+            <th>તારીખો</th>
+            <th>સ્થિતિ</th>
+            <th>કુલ</th>
           </tr>
         </thead>
         <tbody>
           <% recentBookings.forEach((booking) => { %>
             <tr>
-              <td><%= booking.user ? booking.user.name : "Unknown user" %></td>
+              <td><%= booking.user ? booking.user.name : "અજ્ઞાત વપરાશકર્તા" %></td>
               <td><%= booking.displayCar.brand %> <%= booking.displayCar.name %></td>
-              <td><%= booking.pickupDate %> to <%= booking.returnDate %></td>
-              <td><span class="status-badge status-<%= booking.status %>"><%= booking.status %></span></td>
+              <td><%= formatDateRange(booking.pickupDate, booking.returnDate) %></td>
+              <td><span class="status-badge status-<%= booking.status %>"><%= translateStatus(booking.status) %></span></td>
               <td><%= formatCurrency(booking.totalPrice) %></td>
             </tr>
           <% }) %>

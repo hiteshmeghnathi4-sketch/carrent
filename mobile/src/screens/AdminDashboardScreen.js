@@ -4,8 +4,9 @@ import { useIsFocused } from "@react-navigation/native";
 import { apiRequest } from "../api";
 import { useAuth } from "../context/AuthContext";
 import { Screen, Panel, Eyebrow, HeroTitle, BodyText, MetricCard, StatusPill, LoadingPanel } from "../components";
+import { translateCity } from "../i18n";
 import { colors, spacing } from "../theme";
-import { formatCurrency, getErrorMessage } from "../utils";
+import { formatCurrency, formatDateRange, getErrorMessage } from "../utils";
 
 export function AdminDashboardScreen() {
   const { token } = useAuth();
@@ -43,7 +44,7 @@ export function AdminDashboardScreen() {
   if (loading) {
     return (
       <Screen scroll={false}>
-        <LoadingPanel title="Loading dashboard" message="Gathering bookings, users, and revenue stats." />
+        <LoadingPanel title="ડેશબોર્ડ લોડ થઈ રહ્યો છે" message="બુકિંગ્સ, વપરાશકર્તાઓ અને આવકના આંકડા ભેગા થઈ રહ્યા છે." />
       </Screen>
     );
   }
@@ -51,30 +52,30 @@ export function AdminDashboardScreen() {
   return (
     <Screen refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => loadDashboard(true)} />}>
       <Panel>
-        <Eyebrow>Admin dashboard</Eyebrow>
-        <HeroTitle>Monitor fleet activity and revenue from one mobile view.</HeroTitle>
-        <BodyText>Approved earnings, pending requests, and latest bookings stay visible here.</BodyText>
+        <Eyebrow>એડમિન ડેશબોર્ડ</Eyebrow>
+        <HeroTitle>એક જ મોબાઇલ વ્યૂમાં ફ્લીટ પ્રવૃત્તિ અને આવક જુઓ.</HeroTitle>
+        <BodyText>મંજૂર આવક, બાકી વિનંતીઓ અને નવીનતમ બુકિંગ્સ અહીં દેખાશે.</BodyText>
         {error ? <Text style={styles.errorText}>{error}</Text> : null}
       </Panel>
 
       <View style={styles.metricGrid}>
-        <MetricCard label="Cars" value={String(dashboard?.stats?.cars || 0)} />
-        <MetricCard label="Users" value={String(dashboard?.stats?.users || 0)} />
-        <MetricCard label="Bookings" value={String(dashboard?.stats?.bookings || 0)} />
-        <MetricCard label="Pending" value={String(dashboard?.stats?.pendingBookings || 0)} />
-        <MetricCard label="Revenue" value={formatCurrency(dashboard?.stats?.acceptedRevenue || 0)} accent />
+        <MetricCard label="કાર્સ" value={String(dashboard?.stats?.cars || 0)} />
+        <MetricCard label="વપરાશકર્તા" value={String(dashboard?.stats?.users || 0)} />
+        <MetricCard label="બુકિંગ્સ" value={String(dashboard?.stats?.bookings || 0)} />
+        <MetricCard label="બાકી" value={String(dashboard?.stats?.pendingBookings || 0)} />
+        <MetricCard label="આવક" value={formatCurrency(dashboard?.stats?.acceptedRevenue || 0)} accent />
       </View>
 
       <Panel>
-        <Eyebrow>Revenue by city</Eyebrow>
-        <HeroTitle style={styles.sectionTitle}>Where earnings are coming from</HeroTitle>
+        <Eyebrow>શહેર પ્રમાણે આવક</Eyebrow>
+        <HeroTitle style={styles.sectionTitle}>આવક ક્યાંથી આવી રહી છે</HeroTitle>
 
         {!dashboard?.revenueByCity?.length ? (
-          <BodyText>Accepted bookings will appear here once the admin team approves them.</BodyText>
+          <BodyText>એડમિન ટીમ મંજૂરી આપશે પછી મંજૂર બુકિંગ્સ અહીં દેખાશે.</BodyText>
         ) : (
           dashboard.revenueByCity.map((entry) => (
             <View key={entry.city} style={styles.listRow}>
-              <Text style={styles.rowTitle}>{entry.city}</Text>
+              <Text style={styles.rowTitle}>{translateCity(entry.city)}</Text>
               <Text style={styles.rowValue}>{formatCurrency(entry.revenue)}</Text>
             </View>
           ))
@@ -82,14 +83,14 @@ export function AdminDashboardScreen() {
       </Panel>
 
       <Panel>
-        <Eyebrow>Recent bookings</Eyebrow>
-        <HeroTitle style={styles.sectionTitle}>Latest requests</HeroTitle>
+        <Eyebrow>તાજેતરની બુકિંગ્સ</Eyebrow>
+        <HeroTitle style={styles.sectionTitle}>નવીનતમ વિનંતીઓ</HeroTitle>
         {dashboard?.recentBookings?.map((booking) => (
           <View key={booking.id} style={styles.bookingRow}>
             <View style={styles.bookingCopy}>
-              <Text style={styles.rowTitle}>{booking.user?.name || "Unknown user"}</Text>
+              <Text style={styles.rowTitle}>{booking.user?.name || "અજ્ઞાત વપરાશકર્તા"}</Text>
               <BodyText>{booking.car?.brand} {booking.car?.name}</BodyText>
-              <BodyText>{booking.pickupDate} to {booking.returnDate}</BodyText>
+              <BodyText>{formatDateRange(booking.pickupDate, booking.returnDate)}</BodyText>
             </View>
             <StatusPill status={booking.status} />
           </View>
